@@ -37,6 +37,10 @@ module.exports = {
       errors: true
     },
     proxy: {
+      '^/qt-iot-backend': {
+        target: 'http://47.106.178.212:8096',
+        changeOrigin: true
+      },
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
