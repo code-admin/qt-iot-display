@@ -69,6 +69,12 @@ export const constantRoutes = [
         meta: { title: '地图', icon: 'map' }
       },
       {
+        path: 'echarts',
+        name: 'Echarts',
+        component: () => import('@/views/echarts/index'),
+        meta: { title: '图表', icon: 'echarts' }
+      },
+      {
         path: 'table',
         name: 'Table',
         component: () => import('@/views/test/index'),

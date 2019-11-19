@@ -17,6 +17,15 @@ import '@/permission' // permission control
 
 import VueAMap from 'vue-amap' // 高德地图
 
+import ECharts from 'vue-echarts' // 在 webpack 环境下指向 components/ECharts.vue
+
+// 手动引入 ECharts 各模块来减小打包体积
+// import 'echarts/lib/chart/bar'
+// import 'echarts/lib/component/tooltip'
+
+// 需要安装依赖：npm install --save echarts-gl，并添加如下引用
+// import 'echarts-gl'
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
@@ -36,6 +45,9 @@ Vue.use(ElementUI, { locale })
 // Vue.use(ElementUI)
 
 Vue.use(VueAMap)
+
+// 把ECharts注册组件后即可使用
+Vue.component('v-chart', ECharts)
 
 // 初始化地图插件配置
 VueAMap.initAMapApiLoader({
