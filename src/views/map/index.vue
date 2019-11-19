@@ -19,41 +19,48 @@ export default {
       zoom: 12,
       mapCenter: [120.431097, 27.497131],
       events: {
-        init: (o) => {
-          console.log(o.getCenter())
-          console.log(this.$refs.map.$getInstance())
+        init: o => {
+          console.log(o.getCenter());
+          console.log(this.$refs.map.$getInstance());
           o.getCity(result => {
-            console.log(result)
-          })
+            console.log(result);
+          });
         },
-        'moveend': () => {},
-        'zoomchange': () => {},
-        'click': (e) => {
-          alert('map clicked')
+        moveend: () => {},
+        zoomchange: () => {},
+        click: e => {
+          alert("map clicked");
         }
       },
-      mapStyle: 'amap://styles/darkblue',
-      plugin: ['ToolBar', {
-        pName: 'MapType',
-        defaultType: 0,
-        events: {
-          init(o) {
-            console.log(o)
+      mapStyle: "amap://styles/grey",
+      plugin: [
+        "ToolBar",
+        {
+          pName: "MapType",
+          defaultType: 0,
+          events: {
+            init(o) {
+              console.log(o);
+            }
           }
         }
-      }]
-    }
+      ]
+    };
   },
-  methods: {
-
-  }
-
-}
+  methods: {}
+};
 </script>
 
 <style lang="scss" scoped>
 .amap-box {
-    width: 100%;
-    height: calc(100vh - 50px);
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 </style>

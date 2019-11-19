@@ -1,0 +1,61 @@
+<template>
+  <div>
+    <TopMenu class="topmenu-container" />
+    <div class="display-container">
+      <amap />
+      <router-view class="core-container" :key="key" />
+    </div>
+  </div>
+</template>
+
+<script>
+import TopMenu from "./TopMenu";
+import Amap from "@/views/map/index";
+export default {
+  name: "DisplayLayout",
+  components: {
+    TopMenu,
+    Amap
+  },
+  computed: {
+    key() {
+      return this.$route.path;
+    }
+  },
+  data() {
+    return {};
+  }
+};
+</script>
+<style lang="scss" scoped>
+.topmenu-container {
+  color: white;
+  width: 100vw;
+  height: 145px;
+  padding: 20px;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  position: relative;
+  background: rgba(0, 0, 0, 0.281);
+}
+.display-container {
+  color: white;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.core-container {
+  color: white;
+  position: relative;
+  padding: 145px 30px 30px 30px;
+  z-index: 2;
+  margin: 0;
+  box-sizing: border-box;
+}
+</style>
