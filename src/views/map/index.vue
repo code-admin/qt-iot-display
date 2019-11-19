@@ -32,7 +32,7 @@ export default {
           alert('map clicked')
         }
       },
-      mapStyle: 'amap://styles/f57738f096432e7144a508bb11263f49',
+      mapStyle: 'amap://styles/darkblue',
       plugin: ['ToolBar', {
         pName: 'MapType',
         defaultType: 0,
