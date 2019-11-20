@@ -51,8 +51,8 @@ Vue.component('v-chart', ECharts)
 
 // 初始化地图插件配置
 VueAMap.initAMapApiLoader({
-  key: '0785a7b0a0cc28b7b4f22bb351129f9f',
-  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+  key: 'dfaad8ba490df4698e3e4b4d7d7f9124',
+  plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapStyle', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
   v: '1.4.4', // 默认高德 sdk 版本为 1.4.4
   uiVersion: '1.0.11' // UI版本号
 })
