@@ -3,27 +3,27 @@
     <TopMenu class="topmenu-container" />
     <div class="display-container">
       <amap />
-      <router-view class="core-container" :key="key" />
+      <router-view :key="key" class="core-container" />
     </div>
   </div>
 </template>
 
 <script>
-import TopMenu from "./TopMenu";
-import Amap from "@/views/map/index";
+import TopMenu from './TopMenu';
+import Amap from '@/views/map/index';
 export default {
-  name: "DisplayLayout",
+  name: 'DisplayLayout',
   components: {
     TopMenu,
     Amap
+  },
+  data() {
+    return {};
   },
   computed: {
     key() {
       return this.$route.path;
     }
-  },
-  data() {
-    return {};
   }
 };
 </script>
