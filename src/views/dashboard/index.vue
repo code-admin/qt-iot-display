@@ -1,27 +1,86 @@
 <template>
   <div class="dashboard-container">
-    <BoxWrap class="clazz01" title="井盖" subtext="设备告警" />
+    <BoxWrap class="clazz01" title="井盖" subtext="设备告警">
+      <RadarPart />
+    </BoxWrap>
 
-    <BoxWrap class="clazz02" title="井盖" subtext="告警信息" />
+    <BoxWrap class="clazz02" title="井盖" subtext="告警信息">
+      <el-table class="wrap-table" :data="tableData">
+        <el-table-column prop="date" label="时间" width="180" />
+        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
+        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="80" />
+        <el-table-column prop="address" label="地址" show-overflow-tooltip />
+      </el-table>
+    </BoxWrap>
 
-    <BoxWrap class="clazz03" title="雨水井" subtext="设备告警" />
+    <BoxWrap class="clazz03" title="雨水井" subtext="设备告警">
+      <RadarPart />
+    </BoxWrap>
 
-    <BoxWrap class="clazz04" title="雨水井" subtext="告警信息" />
+    <BoxWrap class="clazz04" title="雨水井" subtext="告警信息">
+      <el-table class="wrap-table" :data="tableData">
+        <el-table-column prop="date" label="时间" width="180" />
+        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
+        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="80" />
+        <el-table-column prop="address" label="地址" show-overflow-tooltip />
+      </el-table>
+    </BoxWrap>
 
-    <BoxWrap class="clazz05" title="污水井" subtext="设备告警" />
+    <BoxWrap class="clazz05" title="污水井" subtext="设备告警">
+      <RadarPart />
+    </BoxWrap>
 
-    <BoxWrap class="clazz06" title="污水井" subtext="告警信息" />
+    <BoxWrap class="clazz06" title="污水井" subtext="告警信息">
+      <el-table class="wrap-table" :data="tableData">
+        <el-table-column prop="date" label="时间" width="180" />
+        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
+        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="80" />
+        <el-table-column prop="address" label="地址" show-overflow-tooltip />
+      </el-table>
+    </BoxWrap>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex';
 import BoxWrap from '@/components/BoxWrap';
+import RadarPart from '@/components/RadarPart';
 
 export default {
   name: 'Dashboard',
   components: {
-    BoxWrap
+    BoxWrap,
+    RadarPart
+  },
+  data() {
+    return {
+      tableData: [
+        {
+          date: '2019/11/07 12:05:08',
+          name: '井盖',
+          type: '水位过高',
+          address: '上海市普陀区金沙江路 1518 弄'
+        },
+        {
+          date: '2019/11/06 02:24:12',
+          name: '井盖34',
+          type: '过度倾斜',
+          address: '上海市普陀区金沙江路 1517 弄'
+        },
+        {
+          date: '2019/11/04 19:02:38',
+          name: '井盖25',
+          type: '电量过低',
+          address: '上海市普陀区金沙江路 1519 弄'
+        },
+        {
+          date: '2019/10/01 13:51:52',
+          name: '井盖36',
+          type: '设备溢满',
+          address: '上海市普陀区金沙江路 1516 弄'
+        }
+      ]
+    };
   },
   computed: {
     ...mapGetters(['name'])

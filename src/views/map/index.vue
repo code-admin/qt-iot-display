@@ -53,7 +53,7 @@ export default {
 <style lang="scss" scoped>
 .amap-box {
   color: white;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   position: absolute;
   top: 0;
@@ -61,5 +61,6 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  min-height: 1080px;
 }
 </style>

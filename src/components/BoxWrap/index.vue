@@ -20,6 +20,9 @@
         <span>{{ subtext }}</span>
       </div>
     </div>
+    <div class="slot-content">
+      <slot />
+    </div>
   </div>
 </template>
 
@@ -45,7 +48,6 @@ export default {
   height: 255px;
   position: absolute;
   background-color: #031d2e79;
-
   .horn {
     position: absolute;
     width: 100%;
@@ -154,6 +156,13 @@ export default {
         color: #fcf58e;
       }
     }
+  }
+
+  .slot-content {
+    width: 100%;
+    height: 100%;
+    padding: 30px 20px 20px;
+    overflow: hidden;
   }
 }
 </style>

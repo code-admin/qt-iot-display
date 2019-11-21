@@ -30,7 +30,7 @@ export default {
 <style lang="scss" scoped>
 .topmenu-container {
   color: white;
-  width: 100vw;
+  width: 100%;
   height: 145px;
   padding: 20px;
   top: 0;
@@ -41,7 +41,7 @@ export default {
 }
 .display-container {
   color: white;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   position: absolute;
   top: 0;
@@ -49,6 +49,7 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  min-height: 1080px;
 }
 .core-container {
   color: white;
