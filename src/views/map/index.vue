@@ -7,7 +7,7 @@
       :pitch="50"
       view-mode="2D"
       :center="mapCenter"
-      :zoom="3"
+      :zoom="11"
     />
   </div>
 </template>
@@ -16,7 +16,7 @@
 export default {
   data() {
     return {
-      mapCenter: [17.267074, 36.156046],
+      mapCenter: [120.515051, 27.408898],
       events: {
         init: o => {
           console.log(o.getCenter());
