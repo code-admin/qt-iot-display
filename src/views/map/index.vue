@@ -1,14 +1,8 @@
 <template>
   <div class="amap-page-container">
-    <el-amap
-      class="amap-box"
-      vid="device-map-view"
-      :map-style="mapStyle"
-      :pitch="50"
-      view-mode="2D"
-      :center="mapCenter"
-      :zoom="11"
-    />
+    <el-amap class="amap-box" vid="device-map-view" :map-style="mapStyle" :pitch="50" view-mode="2D" :center="mapCenter" :zoom="11">
+      <el-amap-marker v-for="(marker, index) in markers" :key="index" :position="marker.position" :vid="index" />
+    </el-amap>
   </div>
 </template>
 
@@ -43,24 +37,35 @@ export default {
             }
           }
         }
-      ]
+      ],
+      markers: []
     };
   },
-  methods: {}
+  mounted() {
+    this.getMarkerList();
+  },
+  methods: {
+    getMarkerList: function() {
+      this.markers = [{
+        position: [120.515051, 27.408898],
+        icon: ''
+      }];
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
 .amap-box {
-  color: white;
-  width: 100%;
-  height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  min-height: 1080px;
+    color: white;
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    min-height: 1080px;
 }
 </style>
