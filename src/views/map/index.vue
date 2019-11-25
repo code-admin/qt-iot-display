@@ -55,7 +55,7 @@ export default {
         deviceStatus: 1,
         label: {
           content: '井盖 #11',
-          offset: [-10, -20]
+          offset: [-30, -25]
         }
       },
       {
@@ -63,7 +63,7 @@ export default {
         deviceStatus: 2,
         label: {
           content: '井盖 #12',
-          offset: [-10, -20]
+          offset: [-30, -25]
         }
       },
       {
@@ -71,7 +71,7 @@ export default {
         deviceStatus: 1,
         label: {
           content: '井盖 #13',
-          offset: [-10, -20]
+          offset: [-30, -25]
         }
       },
       {
@@ -79,7 +79,7 @@ export default {
         deviceStatus: 1,
         label: {
           content: '井盖 #14',
-          offset: [-10, -20]
+          offset: [-30, -25]
         }
       },
       {
@@ -87,7 +87,7 @@ export default {
         deviceStatus: 2,
         label: {
           content: '井盖 #15',
-          offset: [-10, -20]
+          offset: [-10, -25]
         }
       },
       {
@@ -95,7 +95,7 @@ export default {
         deviceStatus: 1,
         label: {
           content: '井盖 #16',
-          offset: [-10, -20]
+          offset: [-30, -25]
         }
       },
       {
@@ -103,7 +103,7 @@ export default {
         deviceStatus: 1,
         label: {
           content: '井盖 #17',
-          offset: [-10, -10]
+          offset: [-30, -25]
         }
       }
       ];
@@ -124,5 +124,20 @@ export default {
     padding: 0;
     box-sizing: border-box;
     min-height: 1080px;
+}
+</style>
+
+<style>
+.amap-marker-label {
+    min-width: 100px;
+    min-height: 30px;
+    text-align: center;
+    vertical-align: middle;
+    color: #00FFAA;
+    font-size: 12px;
+    white-space: nowrap;
+    background: rgba(0, 255, 170, 0.2);
+    border: 1px solid rgba(0, 255, 170, 0.41);
+    border-radius: 1px;
 }
 </style>
