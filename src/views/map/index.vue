@@ -29,6 +29,7 @@ export default {
           // o.getCity(result => {
           //   console.log(result);
           // });
+
           // 设置区域地图
           this.setMap();
         },
