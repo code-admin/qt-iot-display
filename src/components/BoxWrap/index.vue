@@ -16,8 +16,19 @@
       <div class="lb" />
       <div class="lm" />
       <div class="title">
-        <span>{{ title }}</span>
-        <span>{{ subtext }}</span>
+        <template v-if="multiple">
+          <el-dropdown class="title__wrap" placement="bottom" trigger="click" @command="tapCatalog">
+            <span class="el-dropdown-link">
+              {{ catalog }}<i v-if="multiple" class="el-icon-caret-bottom" />
+            </span>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item v-for="item in selectList" :key="item" :command="item">{{ item }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </template>
+        <template v-else><span @click="tapCatalog">{{ catalog }}</span></template>
+        <!-- <span :class="multiple?'pointer':''" @click="tapCatalog"> -->
+        <span class="subtext">{{ subtext }}</span>
       </div>
     </div>
     <div class="slot-content">
@@ -34,9 +45,36 @@ export default {
       type: String,
       default: ''
     },
+    selectList: {
+      type: Array,
+      default: () => []
+    },
     subtext: {
       type: String,
       default: ''
+    },
+    change: {
+      type: Function,
+      default: undefined
+    }
+  },
+  data() {
+    const catalog = this.title || this.selectList[0];
+    const multiple = this.selectList.length > 1;
+    return {
+      current: 0,
+      catalog: catalog,
+      multiple: multiple
+    };
+  },
+  methods: {
+    tapCatalog(e) {
+      const callback = this.change;
+      const command = typeof e === 'object' ? this.catalog : e;
+      if (callback && typeof callback === 'function') {
+        callback(this.selectList.findIndex(e => e === command) || 0);
+        this.catalog = command;
+      }
     }
   }
 };
@@ -152,8 +190,25 @@ export default {
       font-weight: bold;
       letter-spacing: 2px;
       text-shadow: 0 0 25px #fcf58e;
-      span:first-of-type {
+      user-select: none;
+
+      &__wrap.el-dropdown {
+        height: 100%;
+        font-size: 20px;
+
+      }
+
+      span:first-of-type:not(.subtext) {
         color: #fcf58e;
+        &.pointer {
+          cursor: pointer;
+        }
+        i {
+          color: white;
+          margin: 0 4px 0 0;
+          font-size: 16px;
+          letter-spacing: 0;
+        }
       }
     }
   }
@@ -164,5 +219,19 @@ export default {
     padding: 30px 20px 20px;
     overflow: hidden;
   }
+}
+.el-dropdown-menu {
+    border: 1px solid rgba(255,243,104,.16);
+    background:rgba(255,243,104,.16);
+    &__item{
+      color: white;
+      &:hover {
+          background-color: rgba(255,243,104,.2);
+          color: white;
+      }
+    }
+}
+.el-popper[x-placement^=bottom]{
+    margin-top: 0;
 }
 </style>

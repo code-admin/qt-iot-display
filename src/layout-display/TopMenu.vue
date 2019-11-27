@@ -19,7 +19,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+
+};
 </script>
 
 <style lang="scss" scoped>
@@ -44,8 +46,19 @@ export default {};
   font-weight: bold;
   display: inline-block;
   text-shadow: 0 0 30px #ffffff62;
+  height:50px;
+  font-size:52px;
+  color:rgba(255,255,255,1);
 }
-
+.date {
+  width:131px;
+  height: 22px;
+  font-size: 30px;
+  font-family:UniDreamLED;
+  font-weight: 400;
+  letter-spacing: 2px;
+  color:rgba(255,255,255,1);
+}
 .navigate {
   display: flex;
   padding: 0 50px;

@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <BoxWrap class="clazz01" title="井盖" subtext="设备告警">
-      <RadarPart />
+    <BoxWrap class="clazz01" subtext="设备告警" :select-list="['常规井','雨水井']" :change="callChange">
+      <RadarPart :data="radarData" />
     </BoxWrap>
 
     <BoxWrap class="clazz02" title="井盖" subtext="告警信息">
@@ -14,7 +14,7 @@
     </BoxWrap>
 
     <BoxWrap class="clazz03" title="雨水井" subtext="设备告警">
-      <RadarPart />
+      <RadarPart :data="radarData" />
     </BoxWrap>
 
     <BoxWrap class="clazz04" title="雨水井" subtext="告警信息">
@@ -27,7 +27,7 @@
     </BoxWrap>
 
     <BoxWrap class="clazz05" title="污水井" subtext="设备告警">
-      <RadarPart />
+      <RadarPart :data="radarData" />
     </BoxWrap>
 
     <BoxWrap class="clazz06" title="污水井" subtext="告警信息">
@@ -54,6 +54,12 @@ export default {
   },
   data() {
     return {
+      radarData: [
+        { name: '水位高度', max: 100, label: '水位告警比例', value: Math.random() * 100, unit: '%' },
+        { name: '电量', max: 100, label: '倾斜告警比例', value: Math.random() * 100, unit: '%' },
+        { name: '溢满', max: 100, label: '溢满告警比例', value: Math.random() * 100, unit: '%' },
+        { name: '设备倾斜', max: 100, label: '电量低告警比例', value: Math.random() * 100, unit: '%' }
+      ],
       tableData: [
         {
           date: '2019/11/07 12:05:08',
@@ -84,6 +90,15 @@ export default {
   },
   computed: {
     ...mapGetters(['name'])
+  },
+  methods: {
+    callChange(e) {
+      console.log('in callChange....', e);
+      const data = this.radarData.map(d => {
+        return Object.assign(d, { value: Math.random() * 100 });
+      });
+      this.radarData = data;
+    }
   }
 };
 </script>
