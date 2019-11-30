@@ -13,8 +13,8 @@
       </el-table>
     </BoxWrap>
 
-    <BoxWrap class="clazz03" title="雨水井" subtext="设备告警">
-      <RadarPart :data="radarData" />
+    <BoxWrap class="clazz03" title="设备类型" subtext="占比情况">
+      <Doughnut :data="doughnutData" />
     </BoxWrap>
 
     <BoxWrap class="clazz04" title="雨水井" subtext="告警信息">
@@ -45,21 +45,19 @@
 import { mapGetters } from 'vuex';
 import BoxWrap from '@/components/BoxWrap';
 import RadarPart from '@/components/RadarPart';
+import Doughnut from '@/components/Doughnut';
 
 export default {
   name: 'Dashboard',
   components: {
     BoxWrap,
-    RadarPart
+    RadarPart,
+    Doughnut
   },
   data() {
     return {
-      radarData: [
-        { name: '水位高度', max: 100, label: '水位告警比例', value: Math.random() * 100, unit: '%' },
-        { name: '电量', max: 100, label: '倾斜告警比例', value: Math.random() * 100, unit: '%' },
-        { name: '溢满', max: 100, label: '溢满告警比例', value: Math.random() * 100, unit: '%' },
-        { name: '设备倾斜', max: 100, label: '电量低告警比例', value: Math.random() * 100, unit: '%' }
-      ],
+      radarData: [],
+      doughnutData: [],
       tableData: [
         {
           date: '2019/11/07 12:05:08',
@@ -91,9 +89,19 @@ export default {
   computed: {
     ...mapGetters(['name'])
   },
+  created() {
+    this.radarData = [
+      { name: '水位高度', max: 100, label: '水位告警比例', value: Math.random() * 100, unit: '%' },
+      { name: '电量', max: 100, label: '倾斜告警比例', value: Math.random() * 100, unit: '%' },
+      { name: '溢满', max: 100, label: '溢满告警比例', value: Math.random() * 100, unit: '%' },
+      { name: '设备倾斜', max: 100, label: '电量低告警比例', value: Math.random() * 100, unit: '%' }
+    ];
+    this.doughnutData = [
+      { name: '污水井', value: 36 }, { name: '常规井', value: 36 }, { name: '雨水井', value: 28 }
+    ];
+  },
   methods: {
     callChange(e) {
-      console.log('in callChange....', e);
       const data = this.radarData.map(d => {
         return Object.assign(d, { value: Math.random() * 100 });
       });

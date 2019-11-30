@@ -189,7 +189,7 @@ export default {
       text-align: center;
       font-weight: bold;
       letter-spacing: 2px;
-      text-shadow: 0 0 25px #fcf58e;
+      text-shadow: 0 0 25px #FFF368;
       user-select: none;
 
       &__wrap.el-dropdown {
@@ -199,7 +199,7 @@ export default {
       }
 
       span:first-of-type:not(.subtext) {
-        color: #fcf58e;
+        color: #FFF368;
         &.pointer {
           cursor: pointer;
         }
