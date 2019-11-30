@@ -221,12 +221,12 @@ export default {
   }
 }
 .el-dropdown-menu {
-    border: 1px solid rgba(255,243,104,.16);
-    background:rgba(255,243,104,.16);
+    border: 1px solid #027680;
+    background:#027680ee;
     &__item{
       color: white;
       &:hover {
-          background-color: rgba(255,243,104,.2);
+          background-color: #01464d;
           color: white;
       }
     }

@@ -33,7 +33,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 #clock {
-  width: 255px;
+  width: 280px;
   text-align: left;
   font-size: 30px;
   font-family:UniDreamLED;

@@ -1,10 +1,10 @@
 <template>
   <div class="dashboard-container">
-    <BoxWrap class="clazz01" subtext="设备告警" :select-list="['常规井','雨水井']" :change="callChange">
+    <BoxWrap class="clazz01" subtext="设备告警" :select-list="['常规井','雨水井','污水井']" :change="callChange">
       <RadarPart :data="radarData" />
     </BoxWrap>
 
-    <BoxWrap class="clazz02" title="井盖" subtext="告警信息">
+    <BoxWrap class="clazz02" title="设备" subtext="告警信息">
       <el-table class="wrap-table" :data="tableData">
         <el-table-column prop="date" label="时间" width="180" />
         <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
@@ -17,13 +17,8 @@
       <Doughnut :data="doughnutData" />
     </BoxWrap>
 
-    <BoxWrap class="clazz04" title="雨水井" subtext="告警信息">
-      <el-table class="wrap-table" :data="tableData">
-        <el-table-column prop="date" label="时间" width="180" />
-        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
-        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="80" />
-        <el-table-column prop="address" label="地址" show-overflow-tooltip />
-      </el-table>
+    <BoxWrap class="clazz04" :select-list="['常规井','雨水井','污水井']" subtext="告警趋势">
+      <AlarmTrend :data="alarmTrend" />
     </BoxWrap>
 
     <BoxWrap class="clazz05" title="污水井" subtext="设备告警">
@@ -46,13 +41,15 @@ import { mapGetters } from 'vuex';
 import BoxWrap from '@/components/BoxWrap';
 import RadarPart from '@/components/RadarPart';
 import Doughnut from '@/components/Doughnut';
+import AlarmTrend from './AlarmTrend';
 
 export default {
   name: 'Dashboard',
   components: {
     BoxWrap,
     RadarPart,
-    Doughnut
+    Doughnut,
+    AlarmTrend
   },
   data() {
     return {
@@ -98,6 +95,15 @@ export default {
     ];
     this.doughnutData = [
       { name: '污水井', value: 36 }, { name: '常规井', value: 36 }, { name: '雨水井', value: 28 }
+    ];
+    this.alarmTrend = [
+      { name: '11/02', value: 45 },
+      { name: '11/03', value: 79 },
+      { name: '11/04', value: 95 },
+      { name: '11/05', value: 39 },
+      { name: '11/06', value: 58 },
+      { name: '11/07', value: 68 },
+      { name: '11/08', value: 62 }
     ];
   },
   methods: {
