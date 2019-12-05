@@ -52,13 +52,20 @@ export const constantRoutes = [{
   children: [{
     path: 'dashboard',
     name: 'Dashboard',
-    component: () =>
-                import('@/views/dashboard/index'),
+    component: () => import('@/views/dashboard/index'),
     meta: { title: '仪表盘', icon: 'dashboard' }
+  }, {
+    path: 'dashboard/wellcover',
+    name: 'DashboardWellcover',
+    component: () => import('@/views/dashboard/wellcover/index'),
+    meta: { title: '井盖设备', icon: 'dashboard' }
+  }, {
+    path: 'dashboard/water',
+    name: 'DashboardWater',
+    component: () => import('@/views/dashboard/water/index'),
+    meta: { title: '水质监测', icon: 'dashboard' }
   }]
-},
-
-{
+}, {
   path: '/example',
   component: Layout,
   redirect: '/example/table',
@@ -70,29 +77,22 @@ export const constantRoutes = [{
     component: () =>
                     import('@/views/map/index'),
     meta: { title: '地图', icon: 'map' }
-  },
-  {
+  }, {
     path: 'echarts',
     name: 'Echarts',
-    component: () =>
-                    import('@/views/echarts/index'),
+    component: () => import('@/views/echarts/index'),
     meta: { title: '图表', icon: 'echarts' }
-  },
-  {
+  }, {
     path: 'table',
     name: 'Table',
-    component: () =>
-                    import('@/views/test/index'),
+    component: () => import('@/views/test/index'),
     meta: { title: 'Table', icon: 'table' }
-  },
-  {
+  }, {
     path: 'tree',
     name: 'Tree',
-    component: () =>
-                    import('@/views/test/index'),
+    component: () => import('@/views/test/index'),
     meta: { title: 'Tree', icon: 'tree' }
-  }
-  ]
+  }]
 },
 
 // 404 page must be placed at the end !!!

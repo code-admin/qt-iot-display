@@ -11,8 +11,8 @@
         <router-link to="/dashboard">综合概况</router-link>
       </div>
       <div>
-        <router-link to="/example">井盖设备</router-link>
-        <router-link to="/example">水质监测</router-link>
+        <router-link to="/dashboard/wellcover">井盖设备</router-link>
+        <router-link to="/dashboard/water">水质监测</router-link>
       </div>
     </div>
   </div>
