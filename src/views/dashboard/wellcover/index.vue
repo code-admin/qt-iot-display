@@ -25,7 +25,9 @@
       </el-row>
 
     </box-wrap>
-    <box-wrap class="clazz03" title="井盖" subtext="告警总数量" />
+    <box-wrap class="clazz03" title="井盖" subtext="告警总数量">
+      <alarm-total />
+    </box-wrap>
     <box-wrap class="clazz04" title="井盖" subtext="实时水位变化" />
     <box-wrap class="clazz05" title="井盖" subtext="告警信息">
       <el-table class="wrap-table" :data="tableData">
@@ -41,10 +43,12 @@
 
 <script>
 import BoxWrap from '@/components/BoxWrap';
+import AlarmTotal from '../charts/AlarmTotal';
 export default {
   name: 'Wellcover',
   components: {
-    BoxWrap
+    BoxWrap,
+    AlarmTotal
   },
   data() {
     return {
