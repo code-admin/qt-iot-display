@@ -1,6 +1,8 @@
 <template>
   <div class="dashboard-container">
-    <box-wrap class="clazz01" title="井盖" subtext="设备告警" />
+    <box-wrap class="clazz01" title="井盖" subtext="设备告警">
+      <device-alarm />
+    </box-wrap>
     <box-wrap class="clazz02" title="井盖" subtext="设备告警排行">
 
       <el-row :gutter="20">
@@ -44,11 +46,13 @@
 <script>
 import BoxWrap from '@/components/BoxWrap';
 import AlarmTotal from '../charts/AlarmTotal';
+import DeviceAlarm from '../charts/DeviceAlarm';
 export default {
   name: 'Wellcover',
   components: {
     BoxWrap,
-    AlarmTotal
+    AlarmTotal,
+    DeviceAlarm
   },
   data() {
     return {
