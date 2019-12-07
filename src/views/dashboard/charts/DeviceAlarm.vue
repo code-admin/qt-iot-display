@@ -13,11 +13,27 @@ export default {
     return {
       options: {
         grid: {
-          left: '1%',
-          right: '2%',
-          top: '10%',
+          left: '1',
+          right: '1',
+          top: '12%',
           bottom: '2%',
           containLabel: true
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          },
+          formatter: '{a0}: {c0}(mg/L) <br />{a1}: {c1} (ph)'
+        },
+        legend: {
+          data: ['COD氨氮', 'PH酸碱度'],
+          textStyle: {
+            color: '#ffffff'
+          }
         },
         xAxis: {
           type: 'category',
@@ -30,15 +46,24 @@ export default {
               fontSize: 13
             }
           },
+          axisTick: {
+            show: false // 隐藏X轴刻度
+          },
           axisLine: {
+            show: true, // 隐藏X轴轴线
             lineStyle: {
               color: '#355061',
               width: 1
             }
           }
         },
-        yAxis: {
+        yAxis: [{
           type: 'value',
+          name: 'mg/L',
+          nameTextStyle: {
+            color: '#ffffff'
+          },
+          position: 'left',
           splitLine: {
             show: true,
             lineStyle: {
@@ -52,6 +77,9 @@ export default {
               width: 1
             }
           },
+          axisTick: {
+            show: false // 隐藏X轴刻度
+          },
           axisLabel: {
             show: true,
             textStyle: {
@@ -60,21 +88,55 @@ export default {
               fontSize: 13
             }
           }
-        },
+        }, {
+          type: 'value',
+          gridIndex: 0,
+          min: 0,
+          max: 14,
+          splitNumber: 8,
+          splitLine: {
+            show: false
+          },
+          axisLine: {
+            show: true,
+            lineStyle: {
+              color: '#354F60',
+              width: 1
+            }
+          },
+          axisTick: {
+            show: false
+          },
+          axisLabel: {
+            show: true,
+            textStyle: {
+              color: '#ffffff',
+              fontFamily: 'Microsoft YaHei',
+              fontSize: 13
+            }
+          }
+        }],
         series: [{
+          name: 'COD氨氮',
           type: 'line',
           smooth: true,
           symbol: 'none',
           smoothMonotone: 'x',
-          itemStyle: { color: '#66FFFF' },
+          itemStyle: {
+            color: '#F78F74'
+          },
           data: [180, 165, 189.99, 150.12, 163.32, 169.21, 171.28, 165.78, 181.21, 179.21]
         }, {
+          name: 'PH酸碱度',
           type: 'line',
+          yAxisIndex: 1, // 使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
           smooth: true,
           symbol: 'none',
           smoothMonotone: 'x',
-          itemStyle: { color: '#F78F74' },
-          data: [120, 155, 179.99, 187.55, 203.32, 179.21, 142.28, 246.98, 191.21, 210.21]
+          itemStyle: {
+            color: '#66FFFF'
+          },
+          data: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21]
         }]
       }
     };
