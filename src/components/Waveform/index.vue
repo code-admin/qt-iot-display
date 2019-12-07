@@ -8,10 +8,24 @@
 
 <script>
 export default {
-  name: 'DeviceAlarm',
+  name: 'Waveform',
+  props: {
+    data: {
+      type: Object,
+      required: true,
+      default: () => {}
+    }
+  },
   data() {
     return {
-      options: {
+
+    };
+  },
+  computed: {
+    options() {
+      const data = this.data;
+      const itmeName = [this.data.options[0].name, this.data.options[1].name];
+      const options = {
         grid: {
           left: '1',
           right: '1',
@@ -30,14 +44,14 @@ export default {
           formatter: '{a0}: {c0}(mg/L) <br />{a1}: {c1} (ph)'
         },
         legend: {
-          data: ['COD氨氮', 'PH酸碱度'],
+          data: itmeName,
           textStyle: {
             color: '#ffffff'
           }
         },
         xAxis: {
           type: 'category',
-          data: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
+          data: data.reportTime,
           axisLabel: {
             show: true,
             textStyle: {
@@ -125,7 +139,7 @@ export default {
           itemStyle: {
             color: '#F78F74'
           },
-          data: [180, 165, 189.99, 150.12, 163.32, 169.21, 171.28, 165.78, 181.21, 179.21]
+          data: data.options[0].values
         }, {
           name: 'PH酸碱度',
           type: 'line',
@@ -136,10 +150,11 @@ export default {
           itemStyle: {
             color: '#66FFFF'
           },
-          data: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21]
+          data: data.options[1].values
         }]
-      }
-    };
+      };
+      return options;
+    }
   }
 };
 </script>

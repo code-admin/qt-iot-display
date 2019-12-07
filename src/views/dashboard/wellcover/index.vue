@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
     <box-wrap class="clazz01" title="井盖" subtext="设备告警">
-      <device-alarm />
+      <waveform :data="waveformData" />
     </box-wrap>
     <box-wrap class="clazz02" title="井盖" subtext="设备告警排行">
 
@@ -39,23 +39,28 @@
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
       </el-table>
     </box-wrap>
-    <box-wrap class="clazz06" title="井盖" subtext="智能状态" />
+    <box-wrap class="clazz06" title="井盖" subtext="智能状态">
+      <doughnut :data="doughnutData" />
+    </box-wrap>
   </div>
 </template>
 
 <script>
 import BoxWrap from '@/components/BoxWrap';
 import AlarmTotal from '../charts/AlarmTotal';
-import DeviceAlarm from '../charts/DeviceAlarm';
+import Doughnut from '@/components/Doughnut';
+import Waveform from '@/components/Waveform';
 export default {
   name: 'Wellcover',
   components: {
     BoxWrap,
     AlarmTotal,
-    DeviceAlarm
+    Waveform,
+    Doughnut
   },
   data() {
     return {
+      waveformData: [],
       tableData: [{
         date: '2019/11/07 12:05:08',
         name: '井盖',
@@ -122,8 +127,27 @@ export default {
         index: 10,
         deviceNumber: '井盖10'
       }
-      ]
+      ],
+      doughnutData: {}
     };
+  },
+  created() {
+    this.initData();
+  },
+  methods: {
+    initData() {
+      this.waveformData = {
+        reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
+        options: [
+          { name: 'COD氨氮', values: [180, 165, 189.99, 150.12, 163.32, 169.21, 171.28, 165.78, 181.21, 179.21] },
+          { name: 'PH酸碱度', values: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21] }
+        ]
+      };
+      this.doughnutData = [
+        { name: '正常', value: 36 }, { name: '未激活', value: 36 }, { name: '信号告警', value: 28 }, { name: '电量告警', value: 36 }, { name: '亮度告警', value: 36 },
+        { name: '倾斜', value: 28 }, { name: '水位告警', value: 36 }, { name: '离线', value: 36 }, { name: '溢满', value: 28 }, { name: '烟雾告警', value: 36 }
+      ];
+    }
   }
 };
 </script>
