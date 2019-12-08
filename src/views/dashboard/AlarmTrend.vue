@@ -28,6 +28,15 @@ export default {
           width: '95%',
           height: '80%'
         },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+        },
         xAxis: {
           axisLabel: {
             color: '#fff'
