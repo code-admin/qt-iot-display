@@ -22,7 +22,7 @@
     </BoxWrap>
 
     <BoxWrap class="clazz05" title="污水井" subtext="水位变化">
-      <RadarPart :data="radarData" />
+      <WaterLevel :data="waterChange" />
     </BoxWrap>
 
     <BoxWrap class="clazz06" title="污水井" subtext="水质参数">
@@ -44,7 +44,9 @@ import RadarPart from '@/components/RadarPart';
 import Doughnut from '@/components/Doughnut';
 import AlarmTrend from './AlarmTrend';
 import Waveform from '@/components/Waveform';
+import WaterLevel from '@/components/WaterLevel';
 import RectWrap from '@/components/RectWrap';
+import 'echarts/lib/component/tooltip';
 
 export default {
   name: 'Dashboard',
@@ -54,12 +56,14 @@ export default {
     Doughnut,
     AlarmTrend,
     Waveform,
+    WaterLevel,
     RectWrap
   },
   data() {
     return {
       radarData: [],
       doughnutData: [],
+      waterChange: [],
       tableData: [
         {
           date: '2019/11/07 12:05:08',
@@ -109,6 +113,13 @@ export default {
       { name: '11/06', value: 58 },
       { name: '11/07', value: 68 },
       { name: '11/08', value: 62 }
+    ];
+    this.waterChange = [
+      { name: '井08', typeName: '离线', value: 0.7, type: 'offline' },
+      { name: '井09', typeName: '告警', value: 0.5, type: 'warn' },
+      { name: '井10', typeName: '正常', value: 0.92, type: 'normal' },
+      { name: '井11', typeName: '离线', value: 0.85, type: 'offline' },
+      { name: '井12', typeName: '故障', value: 1.1, type: 'fault' }
     ];
     this.waveformData = {
       reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
