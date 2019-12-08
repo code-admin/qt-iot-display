@@ -14,7 +14,7 @@
     </BoxWrap>
 
     <BoxWrap class="clazz03" title="设备类型" subtext="占比情况">
-      <Doughnut :data="doughnutData" />
+      <Doughnut :data="doughnutData" indicator />
     </BoxWrap>
 
     <BoxWrap class="clazz04" :select-list="['常规井','雨水井','污水井']" subtext="日告警趋势">

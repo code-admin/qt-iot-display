@@ -15,6 +15,10 @@ export default {
       type: Array,
       required: true,
       default: () => []
+    },
+    indicator: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -23,6 +27,7 @@ export default {
       const doughnutData = data.map(d => {
         return { name: d.name || '', value: (d.value || 0) };
       });
+      const left = doughnutData.length > 5 ? '25%' : '35%';
       const options = {
         legend: {
           show: true,
@@ -37,10 +42,10 @@ export default {
           {
             type: 'pie',
             radius: ['55%', '70%'],
-            center: ['35%', '50%'],
+            center: [left, '50%'],
             label: {
               normal: {
-                show: true,
+                show: this.indicator,
                 fontSize: 14,
                 lineHeight: 18,
                 formatter: '{b}{white|设备\n}{hr|}\n{white|占比{d}%}',
@@ -53,7 +58,7 @@ export default {
             labelLine: {
               normal: { show: true, lineStyle: { color: '#fff', opacity: 0.3 }}
             },
-            color: ['#35E8BE', '#638CFE', '#E88774', '#D0BB67', '#47B165', '#CC8FFC', '#8CF17E', '#6A67FC', '#68BBFC'],
+            color: ['#35E8BE', '#638CFE', '#E88774', '#D0BB67', '#47B165', '#CC8FFC', '#8CF17E', '#6A67FC', '#68BBFC', '#bdbdbd'],
             data: doughnutData
           }
         ]
