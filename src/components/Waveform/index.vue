@@ -40,8 +40,8 @@ export default {
             label: {
               backgroundColor: '#6a7985'
             }
-          },
-          formatter: '{a0}: {c0}(mg/L) <br />{a1}: {c1} (ph)'
+          }
+          // formatter: '{a0}: {c0}(mg/L) <br />{a1}: {c1} (ph)'
         },
         legend: {
           data: itmeName,

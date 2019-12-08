@@ -42,11 +42,22 @@
     <box-wrap class="clazz06" title="井盖" subtext="智能状态">
       <doughnut :data="doughnutData" />
     </box-wrap>
+
+    <square-box class="square-box1">
+      asdfjalsjflasjlfjlasjflasjlfk
+    </square-box>
+    <square-box class="square-box2">
+      asdfjalsjflasjlfjlasjflasjlfk
+    </square-box>
+    <square-box class="square-box3">
+      asdfjalsjflasjlfjlasjflasjlfk
+    </square-box>
   </div>
 </template>
 
 <script>
 import BoxWrap from '@/components/BoxWrap';
+import SquareBox from '@/components/SquareBox';
 import AlarmTotal from '../charts/AlarmTotal';
 import Doughnut from '@/components/Doughnut';
 import Waveform from '@/components/Waveform';
@@ -54,6 +65,7 @@ export default {
   name: 'Wellcover',
   components: {
     BoxWrap,
+    SquareBox,
     AlarmTotal,
     Waveform,
     Doughnut
@@ -199,5 +211,17 @@ export default {
 .clazz06 {
     right: 10px;
     top: 750px;
+}
+.square-box1{
+  left: 587px;
+  top: 790px;
+}
+.square-box2{
+  left: 823px;
+  top: 790px;
+}
+.square-box3{
+  left: 1058px;
+  top: 790px;
 }
 </style>
