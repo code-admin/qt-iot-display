@@ -17,22 +17,23 @@
       <Doughnut :data="doughnutData" />
     </BoxWrap>
 
-    <BoxWrap class="clazz04" :select-list="['常规井','雨水井','污水井']" subtext="告警趋势">
+    <BoxWrap class="clazz04" :select-list="['常规井','雨水井','污水井']" subtext="日告警趋势">
       <AlarmTrend :data="alarmTrend" />
     </BoxWrap>
 
-    <BoxWrap class="clazz05" title="污水井" subtext="设备告警">
+    <BoxWrap class="clazz05" title="污水井" subtext="水位变化">
       <RadarPart :data="radarData" />
     </BoxWrap>
 
-    <BoxWrap class="clazz06" title="污水井" subtext="告警信息">
-      <el-table class="wrap-table" :data="tableData">
-        <el-table-column prop="date" label="时间" width="180" />
-        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
-        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="80" />
-        <el-table-column prop="address" label="地址" show-overflow-tooltip />
-      </el-table>
+    <BoxWrap class="clazz06" title="污水井" subtext="水质参数">
+      <waveform :data="waveformData" />
     </BoxWrap>
+
+    <div class="rect-container">
+      <RectWrap title="设备总数" :value="88.88" color="#FFBF7F" unit="万台" :total="88.88" />
+      <RectWrap title="在线设备数" :value="88" unit="万台" />
+      <RectWrap title="告警设备数" :value="65" color="#66B3FF" />
+    </div>
   </div>
 </template>
 
@@ -42,6 +43,8 @@ import BoxWrap from '@/components/BoxWrap';
 import RadarPart from '@/components/RadarPart';
 import Doughnut from '@/components/Doughnut';
 import AlarmTrend from './AlarmTrend';
+import Waveform from '@/components/Waveform';
+import RectWrap from '@/components/RectWrap';
 
 export default {
   name: 'Dashboard',
@@ -49,7 +52,9 @@ export default {
     BoxWrap,
     RadarPart,
     Doughnut,
-    AlarmTrend
+    AlarmTrend,
+    Waveform,
+    RectWrap
   },
   data() {
     return {
@@ -105,6 +110,13 @@ export default {
       { name: '11/07', value: 68 },
       { name: '11/08', value: 62 }
     ];
+    this.waveformData = {
+      reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
+      options: [
+        { name: 'COD氨氮', values: [180, 165, 189.99, 150.12, 163.32, 169.21, 171.28, 165.78, 181.21, 179.21] },
+        { name: 'PH酸碱度', values: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21] }
+      ]
+    };
   },
   methods: {
     callChange(e) {
@@ -155,5 +167,18 @@ export default {
 .clazz06 {
   right: 10px;
   top: 750px;
+}
+
+.rect-container {
+  top: 790px;
+  left: 50%;
+  height: 214px;
+  display: flex;
+  margin: 0 auto;
+  min-width: 695px;
+  position: absolute;
+  transform: translateX(-50%);
+  justify-content: space-around;
+  // background-color: #3739472d;
 }
 </style>
