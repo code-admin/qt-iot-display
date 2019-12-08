@@ -5,7 +5,7 @@
     </box-wrap>
     <box-wrap class="clazz02" title="井盖" subtext="设备告警排行">
 
-      <el-row :gutter="20">
+      <el-row :gutter="20" class="tied">
         <el-col :span="12">
           <el-table class="wrap-table" :data="top1">
             <el-table-column prop="index" label="名次">
@@ -223,5 +223,13 @@ export default {
 .square-box3{
   left: 1058px;
   top: 790px;
+}
+
+.tied /deep/ .wrap-table.el-table{
+    th,
+    tr,
+    td {
+        padding: 7px 0;
+    }
 }
 </style>
