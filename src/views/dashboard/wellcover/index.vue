@@ -43,7 +43,7 @@
       <doughnut :data="doughnutData" />
     </box-wrap>
 
-    <square-box class="square-box1">
+    <!-- <square-box class="square-box1">
       asdfjalsjflasjlfjlasjflasjlfk
     </square-box>
     <square-box class="square-box2">
@@ -51,13 +51,18 @@
     </square-box>
     <square-box class="square-box3">
       asdfjalsjflasjlfjlasjflasjlfk
-    </square-box>
+    </square-box> -->
+    <div class="rect-container">
+      <RectWrap title="设备总数" :value="88.88" color="#FFBF7F" unit="万台" :total="88.88" />
+      <RectWrap title="在线设备数" :value="88" unit="万台" />
+      <RectWrap title="告警设备数" :value="65" color="#66B3FF" />
+    </div>
   </div>
 </template>
 
 <script>
 import BoxWrap from '@/components/BoxWrap';
-import SquareBox from '@/components/SquareBox';
+import RectWrap from '@/components/RectWrap';
 import AlarmTotal from '../charts/AlarmTotal';
 import Doughnut from '@/components/Doughnut';
 import Waveform from '@/components/Waveform';
@@ -65,7 +70,7 @@ export default {
   name: 'Wellcover',
   components: {
     BoxWrap,
-    SquareBox,
+    RectWrap,
     AlarmTotal,
     Waveform,
     Doughnut
@@ -223,6 +228,19 @@ export default {
 .square-box3{
   left: 1058px;
   top: 790px;
+}
+
+.rect-container {
+  top: 790px;
+  left: 50%;
+  height: 214px;
+  display: flex;
+  margin: 0 auto;
+  min-width: 695px;
+  position: absolute;
+  transform: translateX(-50%);
+  justify-content: space-around;
+  // background-color: #3739472d;
 }
 
 .tied /deep/ .wrap-table.el-table{
