@@ -30,7 +30,9 @@
     <box-wrap class="clazz03" title="井盖" subtext="告警总数量">
       <alarm-total />
     </box-wrap>
-    <box-wrap class="clazz04" title="井盖" subtext="实时水位变化" />
+    <box-wrap class="clazz04" title="井盖" subtext="实时水位变化">
+      <water-level :data="waterChange" />
+    </box-wrap>
     <box-wrap class="clazz05" title="井盖" subtext="告警信息">
       <el-table class="wrap-table" :data="tableData">
         <el-table-column prop="date" label="时间" width="180" />
@@ -43,15 +45,6 @@
       <doughnut :data="doughnutData" />
     </box-wrap>
 
-    <!-- <square-box class="square-box1">
-      asdfjalsjflasjlfjlasjflasjlfk
-    </square-box>
-    <square-box class="square-box2">
-      asdfjalsjflasjlfjlasjflasjlfk
-    </square-box>
-    <square-box class="square-box3">
-      asdfjalsjflasjlfjlasjflasjlfk
-    </square-box> -->
     <div class="rect-container">
       <RectWrap title="设备总数" :value="88.88" color="#FFBF7F" unit="万台" :total="88.88" />
       <RectWrap title="在线设备数" :value="88" unit="万台" />
@@ -66,85 +59,41 @@ import RectWrap from '@/components/RectWrap';
 import AlarmTotal from '../charts/AlarmTotal';
 import Doughnut from '@/components/Doughnut';
 import Waveform from '@/components/Waveform';
+import WaterLevel from '@/components/WaterLevel';
 export default {
   name: 'Wellcover',
   components: {
     BoxWrap,
     RectWrap,
     AlarmTotal,
+    WaterLevel,
     Waveform,
     Doughnut
   },
   data() {
     return {
       waveformData: [],
-      tableData: [{
-        date: '2019/11/07 12:05:08',
-        name: '井盖',
-        type: '水位过高',
-        address: '上海市普陀区金沙江路 1518 弄'
-      },
-      {
-        date: '2019/11/06 02:24:12',
-        name: '井盖34',
-        type: '过度倾斜',
-        address: '上海市普陀区金沙江路 1517 弄'
-      },
-      {
-        date: '2019/11/04 19:02:38',
-        name: '井盖25',
-        type: '电量过低',
-        address: '上海市普陀区金沙江路 1519 弄'
-      },
-      {
-        date: '2019/10/01 13:51:52',
-        name: '井盖36',
-        type: '设备溢满',
-        address: '上海市普陀区金沙江路 1516 弄'
-      }
+      tableData: [
+        { date: '2019/11/07 12:05:08', name: '井盖', type: '水位过高', address: '上海市普陀区金沙江路 1518 弄' },
+        { date: '2019/11/06 02:24:12', name: '井盖34', type: '过度倾斜', address: '上海市普陀区金沙江路 1517 弄' },
+        { date: '2019/11/04 19:02:38', name: '井盖25', type: '电量过低', address: '上海市普陀区金沙江路 1519 弄' },
+        { date: '2019/10/01 13:51:52', name: '井盖36', type: '设备溢满', address: '上海市普陀区金沙江路 1516 弄' }
       ],
-      top1: [{
-        index: 1,
-        deviceNumber: '井盖1'
-      },
-      {
-        index: 2,
-        deviceNumber: '井盖2'
-      },
-      {
-        index: 3,
-        deviceNumber: '井盖3'
-      },
-      {
-        index: 4,
-        deviceNumber: '井盖4'
-      },
-      {
-        index: 5,
-        deviceNumber: '井盖5'
-      }
+      top1: [
+        { index: 1, deviceNumber: '井盖1' },
+        { index: 2, deviceNumber: '井盖2' },
+        { index: 3, deviceNumber: '井盖3' },
+        { index: 4, deviceNumber: '井盖4' },
+        { index: 5, deviceNumber: '井盖5' }
       ],
-      top2: [{
-        index: 6,
-        deviceNumber: '井盖6'
-      },
-      {
-        index: 7,
-        deviceNumber: '井盖7'
-      },
-      {
-        index: 8,
-        deviceNumber: '井盖8'
-      },
-      {
-        index: 9,
-        deviceNumber: '井盖9'
-      },
-      {
-        index: 10,
-        deviceNumber: '井盖10'
-      }
+      top2: [
+        { index: 6, deviceNumber: '井盖6' },
+        { index: 7, deviceNumber: '井盖7' },
+        { index: 8, deviceNumber: '井盖8' },
+        { index: 9, deviceNumber: '井盖9' },
+        { index: 10, deviceNumber: '井盖10' }
       ],
+      waterChange: [],
       doughnutData: {}
     };
   },
@@ -163,6 +112,13 @@ export default {
       this.doughnutData = [
         { name: '正常', value: 36 }, { name: '未激活', value: 36 }, { name: '信号告警', value: 28 }, { name: '电量告警', value: 36 }, { name: '亮度告警', value: 36 },
         { name: '倾斜', value: 28 }, { name: '水位告警', value: 36 }, { name: '离线', value: 36 }, { name: '溢满', value: 28 }, { name: '烟雾告警', value: 36 }
+      ];
+      this.waterChange = [
+        { name: '井08', typeName: '离线', value: 0.7, type: 'offline' },
+        { name: '井09', typeName: '告警', value: 0.5, type: 'warn' },
+        { name: '井10', typeName: '正常', value: 0.92, type: 'normal' },
+        { name: '井11', typeName: '离线', value: 0.85, type: 'offline' },
+        { name: '井12', typeName: '故障', value: 1.1, type: 'fault' }
       ];
     }
   }
