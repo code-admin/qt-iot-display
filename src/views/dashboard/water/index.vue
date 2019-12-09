@@ -4,8 +4,9 @@
       <trend :data="trendData" />
     </box-wrap>
     <box-wrap class="clazz02" title="雨水井" subtext="水位变化趋势" />
-    <box-wrap class="clazz03" title="雨水井" subtext="水质状况" />
-
+    <box-wrap class="clazz03" title="雨水井" subtext="水质状况">
+      <RadarPart :data="radarData" />
+    </box-wrap>
     <box-wrap class="clazz04" title="雨水井" subtext="水质参数">
       <waveform :data="waveformData" />
     </box-wrap>
@@ -25,23 +26,34 @@
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
       </el-table>
     </box-wrap>
+
+    <div class="rect-container">
+      <RectWrap title="设备总数" :value="88.88" color="#FFBF7F" unit="万台" :total="88.88" />
+      <RectWrap title="在线设备数" :value="88" unit="万台" />
+      <RectWrap title="告警设备数" :value="65" color="#66B3FF" />
+    </div>
   </div>
 </template>
 
 <script>
 import BoxWrap from '@/components/BoxWrap';
+import RectWrap from '@/components/RectWrap';
+import RadarPart from '@/components/RadarPart';
 import trend from './Trend';
 import Waveform from '@/components/Waveform';
 export default {
   components: {
     BoxWrap,
+    RectWrap,
     trend,
+    RadarPart,
     Waveform
   },
   data() {
     return {
       trendData: {},
       tableData: [],
+      radarData: [],
       waveformData: []
     };
   },
@@ -62,6 +74,12 @@ export default {
         { date: '2019/11/06 02:24:12', name: '井盖34', type: 'COD浓度过高', address: '上海市普陀区金沙江路 1517 弄' },
         { date: '2019/11/04 19:02:38', name: '井盖25', type: 'PH酸碱度过高', address: '上海市普陀区金沙江路 1519 弄' },
         { date: '2019/10/01 13:51:52', name: '井盖36', type: '设备溢满', address: '上海市普陀区金沙江路 1516 弄' }
+      ];
+      this.radarData = [
+        { name: '水位高度', max: 100, label: '水位告警比例', value: Math.random() * 100, unit: '%' },
+        { name: '电量', max: 100, label: '倾斜告警比例', value: Math.random() * 100, unit: '%' },
+        { name: '溢满', max: 100, label: '溢满告警比例', value: Math.random() * 100, unit: '%' },
+        { name: '设备倾斜', max: 100, label: '电量低告警比例', value: Math.random() * 100, unit: '%' }
       ];
       this.waveformData = {
         reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
