@@ -3,7 +3,9 @@
     <box-wrap class="clazz01" title="污水井" subtext="告警变化趋势">
       <trend :data="trendData" />
     </box-wrap>
-    <box-wrap class="clazz02" title="雨水井" subtext="水位变化趋势" />
+    <box-wrap class="clazz02" title="雨水井" subtext="水位变化趋势">
+      <alarm-total />
+    </box-wrap>
     <box-wrap class="clazz03" title="雨水井" subtext="水质状况">
       <RadarPart :data="radarData" />
     </box-wrap>
@@ -39,6 +41,7 @@
 import BoxWrap from '@/components/BoxWrap';
 import RectWrap from '@/components/RectWrap';
 import RadarPart from '@/components/RadarPart';
+import AlarmTotal from '../charts/AlarmTotal';
 import trend from './Trend';
 import Waveform from '@/components/Waveform';
 export default {
@@ -46,6 +49,7 @@ export default {
     BoxWrap,
     RectWrap,
     trend,
+    AlarmTotal,
     RadarPart,
     Waveform
   },
