@@ -21,17 +21,17 @@
 </style>
 
 <script>
-import 'echarts/lib/chart/line'
-import 'echarts/lib/component/polar'
+import 'echarts/lib/chart/line';
+import 'echarts/lib/component/polar';
 
 export default {
   data() {
-    const data = []
+    const data = [];
 
     for (let i = 0; i <= 360; i++) {
-      const t = i / 180 * Math.PI
-      const r = Math.sin(2 * t) * Math.cos(2 * t)
-      data.push([r, i])
+      const t = i / 180 * Math.PI;
+      const r = Math.sin(2 * t) * Math.cos(2 * t);
+      data.push([r, i]);
     }
 
     return {
@@ -69,7 +69,7 @@ export default {
         ],
         animationDuration: 2000
       }
-    }
+    };
   }
-}
+};
 </script>

@@ -19,7 +19,6 @@ export default {
   },
   computed: {
     options() {
-      console.log(this);
       const data = this.data;
       const options = {
         grid: {

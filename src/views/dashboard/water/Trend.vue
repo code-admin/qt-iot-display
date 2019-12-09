@@ -8,10 +8,9 @@
 
 <script>
 import 'echarts/lib/chart/line';
-import 'echarts/lib/component/tooltip';
 import 'echarts/lib/chart/bar';
 export default {
-  name: 'Waveform',
+  name: 'Trend',
   props: {
     data: {
       type: Object,
@@ -44,7 +43,6 @@ export default {
               backgroundColor: '#6a7985'
             }
           }
-          // formatter: '{a0}: {c0}(mg/L) <br />{a1}: {c1} (ph)'
         },
         legend: {
           data: itmeName,
@@ -108,9 +106,6 @@ export default {
         }, {
           type: 'value',
           gridIndex: 0,
-          min: 0,
-          max: 14,
-          splitNumber: 8,
           splitLine: {
             show: false
           },
@@ -140,9 +135,28 @@ export default {
           symbol: 'none',
           smoothMonotone: 'x',
           itemStyle: {
-            color: '#F78F74'
+            color: '#00FFD5'
           },
-          data: data.options[0].values
+          data: data.options[0].values,
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0,
+                color: 'rgba(0,255,213,0.9)'
+              },
+              {
+                offset: 0.95,
+                color: 'rgba(0,255,213,0.33)'
+              }
+              ]
+            }
+          }
+
         }, {
           name: this.data.options[1].name,
           type: 'line',
@@ -151,9 +165,27 @@ export default {
           symbol: 'none',
           smoothMonotone: 'x',
           itemStyle: {
-            color: '#66FFFF'
+            color: '#E1FF4C'
           },
-          data: data.options[1].values
+          data: data.options[1].values,
+          areaStyle: {
+            color: {
+              type: 'linear',
+              x: 0,
+              y: 0,
+              x2: 0,
+              y2: 1,
+              colorStops: [{
+                offset: 0,
+                color: 'rgba(246,255,127,0.9)'
+              },
+              {
+                offset: 0.95,
+                color: 'rgba(246,255,127,0.33)'
+              }
+              ]
+            }
+          }
         }]
       };
       return options;
