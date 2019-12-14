@@ -57,8 +57,11 @@ export default {
             type: 'line',
             smooth: true,
             data: data,
-            symbol: 'none',
+            symbol: 'circle',
+            symbolSize: 0.1,
             smoothMonotone: 'x',
+            hoverAnimation: false,
+            label: { show: true, color: '#fff' },
             itemStyle: { color: '#FF99AA' },
             areaStyle: {
               color: {
