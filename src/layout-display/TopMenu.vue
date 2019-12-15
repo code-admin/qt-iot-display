@@ -83,11 +83,13 @@ export default {
   text-align: center;
   display: inline-block;
   background: url(../assets/btn.png) no-repeat;
+  transition: none;
 }
 
-.navigate .router-link-exact-active.router-link-active{
+.navigate a:hover,.navigate .router-link-exact-active.router-link-active{
   text-shadow: 0 0 20px #00ffff66;
   box-shadow: 0 0 20px 0 #00ffff66;
   background-position-x: -174.5px;
+  transition: box-shadow 0.4s;
 }
 </style>
