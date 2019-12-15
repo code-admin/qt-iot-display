@@ -37,7 +37,7 @@ export default {
   left: 0;
   z-index: 3;
   position: relative;
-  background: url(../assets/de.png) center 50px no-repeat;
+  background: url(../assets/de.png) center 40px no-repeat;
 }
 .display-container {
   color: white;

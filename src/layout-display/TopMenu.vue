@@ -2,7 +2,7 @@
   <div>
     <div class="flex-top">
       <div class="weather">降水量：53.6ml-气压：102kPa-PM 2.5:13（优）</div>
-      <div class="title">智能设备综合管理平台</div>
+      <div class="title"><!-- 智能设备综合管理平台 --></div>
       <div class="date"><TimeClock /></div>
     </div>
     <div class="navigate">
@@ -48,10 +48,14 @@ export default {
   font-size: 52px;
   font-weight: bold;
   display: inline-block;
-  text-shadow: 0 0 30px #ffffff62;
-  height:50px;
+  height: 125px;
+  width: 930px;
+  margin-top: -25px;
   font-size:52px;
-  color:rgba(255,255,255,1);
+  // color:rgba(255,255,255,0);
+  // text-shadow: 0 0 30px #ffffff62;
+  background: url(../assets/title.png) center top no-repeat;
+
 }
 .date {
   display: flex;
@@ -60,6 +64,7 @@ export default {
 .navigate {
   display: flex;
   padding: 0 50px;
+  margin-top: -30px;
   justify-content: space-between;
   > div {
     width: 430px;
@@ -67,9 +72,9 @@ export default {
     justify-content: space-around;
   }
 }
-a {
-  width: 172px;
-  height: 42px;
+.navigate a {
+  width: 174px;
+  height: 45px;
   cursor: pointer;
   color: white;
   font-size: 19px;
@@ -77,6 +82,12 @@ a {
   line-height: 42px;
   text-align: center;
   display: inline-block;
-  background:rgba(3,55,94,.2);
+  background: url(../assets/btn.png) no-repeat;
+}
+
+.navigate .router-link-exact-active.router-link-active{
+  text-shadow: 0 0 20px #00ffff66;
+  box-shadow: 0 0 20px 0 #00ffff66;
+  background-position-x: -174.5px;
 }
 </style>
