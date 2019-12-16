@@ -6,12 +6,14 @@
 
     <!-- 窗口信息 -->
     <el-dialog class="window-dialog" :visible.sync="dialogVisible" width="1179px">
-      <!-- <span>这是一段信息</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-      </span> -->
-      alksdfjlasdf
+      <div class="liquid-container">
+        <LiquidFill :data="[]" />
+        <LiquidFill :data="[]" />
+        <LiquidFill :data="[]" />
+        <LiquidFill :data="[]" />
+        <LiquidFill :data="[]" />
+        <LiquidFill :data="[]" />
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -20,8 +22,12 @@
 import {
   AMapManager
 } from 'vue-amap';
+import LiquidFill from '@/components/LiquidFill';
 const amapManager = new AMapManager();
 export default {
+  components: {
+    LiquidFill
+  },
   data() {
     return {
       dialogVisible: false,
@@ -211,17 +217,15 @@ export default {
     box-sizing: border-box;
     min-height: 1080px;
 }
-
+.liquid-container {
+  display: flex;
+  justify-content: space-around;
+}
 .window-dialog /deep/ .el-dialog {
-    background: rgba(0,20,40, 1);
-    opacity: 0.24;
     min-height: 490px;
+    padding: 50px 70px 20px;
+    background: rgba(0,20,40, 0.84);
     border: 1px solid #00F1FB;
-
-    .el-dialog__header,
-    .el-dialog__body {
-        display: none;
-    }
 }
 </style>
 
