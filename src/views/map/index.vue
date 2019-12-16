@@ -5,7 +5,7 @@
     </el-amap>
 
     <!-- 窗口信息 -->
-    <el-dialog :visible.sync="dialogVisible" width="30%">
+    <el-dialog class="window-dialog" :visible.sync="dialogVisible" width="1179px">
       <!-- <span>这是一段信息</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -119,11 +119,11 @@ export default {
             // 轮廓线样式，实线:solid，虚线:dashed
             strokeStyle: 'dashed',
             /* 勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在
-                                      ie9+浏览器有效 取值：
-                                      实线：[0,0,0]
-                                      虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
-                                      点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
-                                      线和10个像素的空白 （如此反复）组成的虚线*/
+                                                  ie9+浏览器有效 取值：
+                                                  实线：[0,0,0]
+                                                  虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
+                                                  点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
+                                                  线和10个像素的空白 （如此反复）组成的虚线*/
             strokeDasharray: [10, 2, 10]
           });
           polygon.setPath(pathArray);
@@ -210,6 +210,18 @@ export default {
     padding: 0;
     box-sizing: border-box;
     min-height: 1080px;
+}
+
+.window-dialog /deep/ .el-dialog {
+    background: rgba(0,20,40, 1);
+    opacity: 0.24;
+    min-height: 490px;
+    border: 1px solid #00F1FB;
+
+    .el-dialog__header,
+    .el-dialog__body {
+        display: none;
+    }
 }
 </style>
 
