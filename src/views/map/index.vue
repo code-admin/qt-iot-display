@@ -14,6 +14,9 @@
         <LiquidFill :data="[]" />
         <LiquidFill :data="[]" />
       </div>
+      <div class="tortuous-container">
+        <TortuousLine :data="{}" />
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -23,10 +26,12 @@ import {
   AMapManager
 } from 'vue-amap';
 import LiquidFill from '@/components/LiquidFill';
+import TortuousLine from '@/components/TortuousLine';
 const amapManager = new AMapManager();
 export default {
   components: {
-    LiquidFill
+    LiquidFill,
+    TortuousLine
   },
   data() {
     return {
@@ -125,11 +130,12 @@ export default {
             // 轮廓线样式，实线:solid，虚线:dashed
             strokeStyle: 'dashed',
             /* 勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在
-                                                  ie9+浏览器有效 取值：
-                                                  实线：[0,0,0]
-                                                  虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
-                                                  点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
-                                                  线和10个像素的空白 （如此反复）组成的虚线*/
+                                      ie9+浏览器有效 取值：
+                                      实线：[0,0,0]
+                                      虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
+                                      点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
+                                      线和10个像素的空白 （如此反复）组成的虚线
+                                    */
             strokeDasharray: [10, 2, 10]
           });
           polygon.setPath(pathArray);
@@ -198,7 +204,7 @@ export default {
     },
     handleMarker(marker) {
       this.dialogVisible = !this.dialogVisible;
-      console.log(marker);
+      // console.log(marker);
     }
   }
 };
@@ -217,15 +223,28 @@ export default {
     box-sizing: border-box;
     min-height: 1080px;
 }
+
 .liquid-container {
-  display: flex;
-  justify-content: space-around;
+    display: flex;
+    justify-content: space-around;
+}
+.tortuous-container{
+  width: 100%;
+  height: 300px;
+  margin-top: 40px;
 }
 .window-dialog /deep/ .el-dialog {
     min-height: 490px;
-    padding: 50px 70px 20px;
-    background: rgba(0,20,40, 0.84);
+    // padding: 50px 70px 20px;
+    background: rgba(0, 20, 40, 0.84);
     border: 1px solid #00F1FB;
+
+    .el-dialog__header{
+      display: none;
+    }
+    .el-dialog__body{
+      padding: 0;
+    }
 }
 </style>
 
