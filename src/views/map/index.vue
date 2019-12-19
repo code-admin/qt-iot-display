@@ -5,15 +5,7 @@
     </el-amap>
 
     <!-- 窗口信息 -->
-    <el-dialog class="window-dialog" :visible.sync="dialogVisible" width="1140px">
-      <el-row class="title" :gutter="2">
-        <el-col :span="12">
-          <div class="name">{{ deviceName }}</div>
-        </el-col>
-        <el-col :span="12">
-          <div class="subheading">设备参数信息</div>
-        </el-col>
-      </el-row>
+    <qt-dialog :visible.sync="dialogVisible" highlight-title="88#污水井" title="设备置信参数">
       <div class="box-warp">
         <div class="liquid-container">
           <LiquidFill :data="[]" />
@@ -27,7 +19,7 @@
           <TortuousLine :data="{}" />
         </div>
       </div>
-    </el-dialog>
+    </qt-dialog>
   </div>
 </template>
 
@@ -247,53 +239,11 @@ export default {
     margin-top: 40px;
 }
 
-.window-dialog {
-    background: url(../../assets/alert_window.png) center no-repeat;
-    position: absolute;
-
-    .title {
-        width: 400px;
-        height: 40px;
-        position: absolute;
-        top: -76px;
-        left: 374px;
-
-        div {
-            line-height: 40px;
-            font-size: 26px;
-            color: #ffffff;
-            font-family: Microsoft YaHei;
-            font-weight: bold;
-        }
-
-        .name {
-            text-align: right;
-            color: #ffff00;
-        }
-    }
-}
-
 .box-warp {
     height: 568px;
     padding: 80px 20px 0;
 }
 
-.window-dialog /deep/ .el-dialog {
-    position: absolute;
-    top: 120px;
-    left: 50%;
-    margin-left: -570px;
-    background: rgba(0, 20, 40, 0.05);
-    // border: 1px solid red;
-
-    .el-dialog__header {
-        display: none;
-    }
-
-    .el-dialog__body {
-        padding: 0;
-    }
-}
 </style>
 
 <style>
