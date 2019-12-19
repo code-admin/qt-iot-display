@@ -5,17 +5,27 @@
     </el-amap>
 
     <!-- 窗口信息 -->
-    <el-dialog class="window-dialog" :visible.sync="dialogVisible" width="1179px">
-      <div class="liquid-container">
-        <LiquidFill :data="[]" />
-        <LiquidFill :data="[]" />
-        <LiquidFill :data="[]" />
-        <LiquidFill :data="[]" />
-        <LiquidFill :data="[]" />
-        <LiquidFill :data="[]" />
-      </div>
-      <div class="tortuous-container">
-        <TortuousLine :data="{}" />
+    <el-dialog class="window-dialog" :visible.sync="dialogVisible" width="1140px">
+      <el-row class="title" :gutter="2">
+        <el-col :span="12">
+          <div class="name">{{ deviceName }}</div>
+        </el-col>
+        <el-col :span="12">
+          <div class="subheading">设备参数信息</div>
+        </el-col>
+      </el-row>
+      <div class="box-warp">
+        <div class="liquid-container">
+          <LiquidFill :data="[]" />
+          <LiquidFill :data="[]" />
+          <LiquidFill :data="[]" />
+          <LiquidFill :data="[]" />
+          <LiquidFill :data="[]" />
+          <LiquidFill :data="[]" />
+        </div>
+        <div class="tortuous-container">
+          <TortuousLine :data="{}" />
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -73,7 +83,8 @@ export default {
       mapStyle: 'amap://styles/f8fa7a6a6b7eb457f6bcdcb91abd0529',
       markers: [],
       map: null,
-      componentMap: null
+      componentMap: null,
+      deviceName: null
     };
   },
   computed: {
@@ -130,12 +141,12 @@ export default {
             // 轮廓线样式，实线:solid，虚线:dashed
             strokeStyle: 'dashed',
             /* 勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在
-                                      ie9+浏览器有效 取值：
-                                      实线：[0,0,0]
-                                      虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
-                                      点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
-                                      线和10个像素的空白 （如此反复）组成的虚线
-                                    */
+                                                                                                                                                              ie9+浏览器有效 取值：
+                                                                                                                                                              实线：[0,0,0]
+                                                                                                                                                              虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
+                                                                                                                                                              点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
+                                                                                                                                                              线和10个像素的空白 （如此反复）组成的虚线
+                                                                                                                                                            */
             strokeDasharray: [10, 2, 10]
           });
           polygon.setPath(pathArray);
@@ -203,6 +214,7 @@ export default {
       ];
     },
     handleMarker(marker) {
+      this.deviceName = marker.label.content || '';
       this.dialogVisible = !this.dialogVisible;
       // console.log(marker);
     }
@@ -228,22 +240,58 @@ export default {
     display: flex;
     justify-content: space-around;
 }
-.tortuous-container{
-  width: 100%;
-  height: 300px;
-  margin-top: 40px;
-}
-.window-dialog /deep/ .el-dialog {
-    min-height: 490px;
-    // padding: 50px 70px 20px;
-    background: rgba(0, 20, 40, 0.84);
-    border: 1px solid #00F1FB;
 
-    .el-dialog__header{
-      display: none;
+.tortuous-container {
+    width: 100%;
+    height: 300px;
+    margin-top: 40px;
+}
+
+.window-dialog {
+    background: url(../../assets/alert_window.png) center no-repeat;
+    position: absolute;
+
+    .title {
+        width: 400px;
+        height: 40px;
+        position: absolute;
+        top: -76px;
+        left: 374px;
+
+        div {
+            line-height: 40px;
+            font-size: 26px;
+            color: #ffffff;
+            font-family: Microsoft YaHei;
+            font-weight: bold;
+        }
+
+        .name {
+            text-align: right;
+            color: #ffff00;
+        }
     }
-    .el-dialog__body{
-      padding: 0;
+}
+
+.box-warp {
+    height: 568px;
+    padding: 80px 20px 0;
+}
+
+.window-dialog /deep/ .el-dialog {
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    margin-left: -570px;
+    background: rgba(0, 20, 40, 0.05);
+    // border: 1px solid red;
+
+    .el-dialog__header {
+        display: none;
+    }
+
+    .el-dialog__body {
+        padding: 0;
     }
 }
 </style>
