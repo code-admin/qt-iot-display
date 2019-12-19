@@ -2,7 +2,7 @@
   <div>
     <div class="flex-top">
       <div class="weather">
-        <Weather/>
+        <Weather />
       </div>
       <div class="title"><!-- 智能设备综合管理平台 --></div>
       <div class="date"><TimeClock /></div>
@@ -26,7 +26,7 @@ import Weather from '@/components/Weather';
 export default {
   components: {
     TimeClock: TimeClock,
-    Weather:Weather
+    Weather: Weather
   }
 };
 </script>
@@ -36,9 +36,11 @@ export default {
   display: flex;
   font-size: 24px;
   font-weight: bold;
+  align-items: flex-start;
   > div {
     min-width: 445px;
     text-align: center;
+    position: relative;
   }
 }
 .weather {

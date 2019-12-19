@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="window-dialog" :visible.sync="visible" :width="width" :show-close="false">
+  <el-dialog custom-class="window-dialog" :visible.sync="visible" :width="width" :show-close="false" :before-close="closeDialog">
     <template slot="title">
       <div class="qt-dialog-title-container">
         <div v-if="highlightTitle" class="highlight-title">{{ highlightTitle }}</div>
@@ -32,6 +32,21 @@ export default {
       type: String,
       required: true,
       default: ''
+    },
+    close: {
+      type: Function,
+      required: false,
+      default: null
+    }
+  },
+  methods: {
+    closeDialog: function(e) {
+      if (e !== false) {
+        this.$emit('update:visible', false);
+      }
+      if (this.close !== null && typeof this.close === 'function') {
+        this.close();
+      }
     }
   }
 };
