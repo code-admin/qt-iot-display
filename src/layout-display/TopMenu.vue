@@ -1,7 +1,9 @@
 <template>
   <div>
     <div class="flex-top">
-      <div class="weather">降水量：53.6ml-气压：102kPa-PM 2.5:13（优）</div>
+      <div class="weather">
+        <Weather/>
+      </div>
       <div class="title"><!-- 智能设备综合管理平台 --></div>
       <div class="date"><TimeClock /></div>
     </div>
@@ -20,9 +22,11 @@
 
 <script>
 import TimeClock from '@/components/TimeClock';
+import Weather from '@/components/Weather';
 export default {
   components: {
-    TimeClock: TimeClock
+    TimeClock: TimeClock,
+    Weather:Weather
   }
 };
 </script>

@@ -74,9 +74,10 @@ export default {
     return {
       waveformData: [],
       tableData: [
-        { date: '2019/11/07 12:05:08', name: '井盖', type: '水位过高', address: '上海市普陀区金沙江路 1518 弄' },
+        { date: '2019/11/07 12:05:08', name: '井盖23', type: '水位过高', address: '上海市普陀区金沙江路 1518 弄' },
         { date: '2019/11/06 02:24:12', name: '井盖34', type: '过度倾斜', address: '上海市普陀区金沙江路 1517 弄' },
         { date: '2019/11/04 19:02:38', name: '井盖25', type: '电量过低', address: '上海市普陀区金沙江路 1519 弄' },
+        { date: '2019/12/14 09:44:23', name: '井盖25', type: '离线告警', address: '上海市普陀区金沙江路 1511 弄' },
         { date: '2019/10/01 13:51:52', name: '井盖36', type: '设备溢满', address: '上海市普陀区金沙江路 1516 弄' }
       ],
       top1: [
@@ -120,6 +121,14 @@ export default {
         { name: '井11', typeName: '离线', value: 0.85, type: 'offline' },
         { name: '井12', typeName: '故障', value: 1.1, type: 'fault' }
       ];
+      this.paly();
+    },
+    paly() {
+      setInterval(this.change, 2000);//每两秒执行一次插入删除操作
+    },
+    change(){
+      this.tableData.push(this.tableData[0]);//把第一条数据插入数组最有一条
+      this.tableData.shift();//删除数组中第一条数据
     }
   }
 };
