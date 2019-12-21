@@ -1,19 +1,19 @@
 <template>
-<div class="wrap">
+  <div class="wrap">
     <div class="content">
-        <p> 降水量：53.6ml-气压：102kPa-PM 2.5:13（优）</p>
-        <p> 风向：东南风-风速：21M/H（三级）</p>
+      <p> 降水量：53.6ml-气压：102kPa-PM 2.5:13（优）</p>
+      <p> 风向：东南风-风速：21M/H（三级）</p>
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: 'Weather',
-    data() {
+  name: 'Weather',
+  data() {
 
-    }
-}
+  }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -29,7 +29,7 @@ export default {
 p {
     margin: 0;
     height: 40px;
-    width: 500px;
+    width: 550px;
     overflow: hidden;
 }
 
@@ -43,12 +43,17 @@ p {
         opacity: 1
     }
 
-    50% {
-        top: -40px;
+    16.67% {
+        top: 0px;
         opacity: 1
     }
 
-    75% {
+    33.33% {
+        top: 0px;
+        opacity: 1
+    }
+
+    50% {
         top: -40px;
         opacity: 0
     }
@@ -62,17 +67,22 @@ p {
 @-webkit-keyframes anim2 {
 
     0% {
-        top: -40px;
-        opacity: 0
-    }
-
-    25% {
-        top: 40px;
+        top: 0px;
         opacity: 0
     }
 
     50% {
         top: 40px;
+        opacity: 0
+    }
+
+    66.67% {
+        top: 0px;
+        opacity: 1
+    }
+
+    83.33% {
+        top: 0px;
         opacity: 1
     }
 
@@ -82,21 +92,13 @@ p {
     }
 }
 
-/* .content p:nth-child(1) {
-            background-color: red;
-        }
-
-        .content p:nth-child(2) {
-            background-color: yellow;
-        } */
-
 .content p:nth-child(1) {
 
-    -webkit-animation: anim1 10s linear infinite;
+    -webkit-animation: anim1 8s linear infinite;
 }
 
 .content p:nth-child(2) {
 
-    -webkit-animation: anim2 10s linear infinite;
+    -webkit-animation: anim2 8s linear infinite;
 }
 </style>
