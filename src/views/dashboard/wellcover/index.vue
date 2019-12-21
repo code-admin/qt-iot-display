@@ -124,11 +124,11 @@ export default {
       this.paly();
     },
     paly() {
-      setInterval(this.change, 2000);//每两秒执行一次插入删除操作
+      setInterval(this.change, 2000);// 每两秒执行一次插入删除操作
     },
-    change(){
-      this.tableData.push(this.tableData[0]);//把第一条数据插入数组最有一条
-      this.tableData.shift();//删除数组中第一条数据
+    change() {
+      this.tableData.push(this.tableData[0]);// 把第一条数据插入数组最有一条
+      this.tableData.shift();// 删除数组中第一条数据
     }
   }
 };
