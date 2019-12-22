@@ -1,7 +1,7 @@
 <template>
   <div class="amap-page-container">
     <el-amap ref="map" class="amap-box" vid="device-map-view" :amap-manager="amapManager" :events="events" :map-style="mapStyle" :pitch="50" view-mode="2D" :center="mapCenter" :zoom="zoom">
-      <el-amap-marker v-for="(marker, index) in markers" :key="index" :position="marker.position" :events="{click: ()=>{handleMarker(marker)}}" :content="getContentByDeviceStatus(marker.deviceStatus)" :vid="index" title="点击查看设备信息" :offset="[-14,-14]" :label="marker.label" />
+      <el-amap-marker v-for="(marker, index) in markers" :key="index" :position="marker.position" :events="{click: ()=>{handleMarker(marker)}}" :content="getContentByDeviceStatus(3,marker.deviceStatus)" :vid="index" title="点击查看设备信息" :offset="[-14,-14]" :label="marker.label" />
     </el-amap>
 
     <!-- 窗口信息 -->
@@ -39,10 +39,6 @@ export default {
     return {
       dialogVisible: false,
       amapManager,
-      // 图表+样式
-      dom_jg: "<img src='https://www.legendfly.site/image-shiding/pic_03.png' style='width:40px;height:40px;'></img>",
-      dom_jg_red: "<img src='https://www.legendfly.site/image-shiding/pic_02.png' style='width:40px;height:40px;'></img>",
-      dom_jg_disable: "<img src='https://www.legendfly.site/image-shiding/pic_05.png' style='width:40px;height:40px;'></img>",
       // 可以根据项目 经纬度来设置地图中心点
       mapCenter: [120.500439, 27.366849],
       zoom: 11,
@@ -81,13 +77,38 @@ export default {
   },
   computed: {
     getContentByDeviceStatus() {
-      return function(status) {
-        if (status === 1) {
-          return this.dom_jg;
-        } else if (status === 2) {
-          return this.dom_jg_red;
+      return function(deviceType, status) {
+        // 常规井
+        if (deviceType === 1 && status === 1) {
+          return `<img src='${require('../../assets/jg_green.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 2) {
+          return `<img src='${require('../../assets/jg_red.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 3) {
+          return `<img src='${require('../../assets/jg_white.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 4) {
+          return `<img src='${require('../../assets/jg_yellow.png')}' style='width:40px;height:40px;'></img>`;
         }
-        return this.dom_jg_disable;
+        // 雨水井
+        if (deviceType === 2 && status === 1) {
+          return `<img src='${require('../../assets/ys_green.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 2) {
+          return `<img src='${require('../../assets/ys_red.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 3) {
+          return `<img src='${require('../../assets/ys_white.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 4) {
+          return `<img src='${require('../../assets/ys_yellow.png')}' style='width:40px;height:40px;'></img>`;
+        }
+        // 污水井
+        if (deviceType === 3 && status === 1) {
+          return `<img src='${require('../../assets/ws_green.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 2) {
+          return `<img src='${require('../../assets/ws_red.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 3) {
+          return `<img src='${require('../../assets/ws_white.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 4) {
+          return `<img src='${require('../../assets/ws_yellow.png')}' style='width:40px;height:40px;'></img>`;
+        }
+        return `<img src='${require('../../assets/jg_white.png')}' style='width:40px;height:40px;'></img>`;
       };
     }
   },
@@ -133,12 +154,12 @@ export default {
             // 轮廓线样式，实线:solid，虚线:dashed
             strokeStyle: 'dashed',
             /* 勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在
-                                                                                                                                                              ie9+浏览器有效 取值：
-                                                                                                                                                              实线：[0,0,0]
-                                                                                                                                                              虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
-                                                                                                                                                              点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
-                                                                                                                                                              线和10个像素的空白 （如此反复）组成的虚线
-                                                                                                                                                            */
+                                                                                                                                                                          ie9+浏览器有效 取值：
+                                                                                                                                                                          实线：[0,0,0]
+                                                                                                                                                                          虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
+                                                                                                                                                                          点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
+                                                                                                                                                                          线和10个像素的空白 （如此反复）组成的虚线
+                                                                                                                                                                        */
             strokeDasharray: [10, 2, 10]
           });
           polygon.setPath(pathArray);
@@ -243,7 +264,6 @@ export default {
     height: 568px;
     padding: 80px 20px 0;
 }
-
 </style>
 
 <style>
