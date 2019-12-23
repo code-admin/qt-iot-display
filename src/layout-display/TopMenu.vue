@@ -2,7 +2,7 @@
   <div>
     <div class="flex-top">
       <div class="weather">
-        <Weather />
+        <weather />
       </div>
       <div class="title"><!-- 智能设备综合管理平台 --></div>
       <div class="date"><TimeClock /></div>
@@ -25,8 +25,8 @@ import TimeClock from '@/components/TimeClock';
 import Weather from '@/components/Weather';
 export default {
   components: {
-    TimeClock: TimeClock,
-    Weather: Weather
+    TimeClock,
+    Weather
   }
 };
 </script>
