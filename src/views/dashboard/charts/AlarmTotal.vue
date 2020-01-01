@@ -7,7 +7,6 @@
 </template>
 
 <script>
-import '@/utils/echarts-tooltip-carousel.js';
 const echarts = require('echarts');
 export default {
   name: 'AlarmTotal',
