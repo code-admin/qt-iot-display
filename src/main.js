@@ -37,7 +37,7 @@ import QtDialog from '@/components/QtDialog';
  */
 import { mockXHR } from '../mock';
 if (process.env.NODE_ENV === 'production') {
-  mockXHR();
+  mockXHR()
 }
 
 // set ElementUI lang to EN
@@ -45,7 +45,10 @@ Vue.use(ElementUI, { locale });
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 
-Vue.use(VueAMap);
+setTimeout(() => {
+  localStorage.clear();
+  Vue.use(VueAMap);
+}, 0);
 
 // 把ECharts注册组件后即可使用
 Vue.component('v-chart', ECharts);
