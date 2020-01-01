@@ -28,7 +28,7 @@
 
     </box-wrap>
     <box-wrap class="clazz03" title="井盖" subtext="告警总数量">
-      <alarm-total />
+      <alarm-total :data="warnData" />
     </box-wrap>
     <box-wrap class="clazz04" title="井盖" subtext="实时水位变化">
       <water-level :data="waterChange" />
@@ -94,6 +94,7 @@ export default {
         { index: 9, deviceNumber: '井盖9' },
         { index: 10, deviceNumber: '井盖10' }
       ],
+      warnData: [],
       waterChange: [],
       doughnutData: {}
     };
@@ -113,6 +114,15 @@ export default {
       this.doughnutData = [
         { name: '正常', value: 36 }, { name: '未激活', value: 36 }, { name: '信号告警', value: 28 }, { name: '电量告警', value: 36 }, { name: '亮度告警', value: 36 },
         { name: '倾斜', value: 28 }, { name: '水位告警', value: 36 }, { name: '离线', value: 36 }, { name: '溢满', value: 28 }, { name: '烟雾告警', value: 36 }
+      ];
+      this.warnData = [
+        { time: '1/12', value: 45 },
+        { time: '1/12', value: 79 },
+        { time: '1/12', value: 95 },
+        { time: '1/12', value: 39 },
+        { time: '1/12', value: 58 },
+        { time: '1/12', value: 68 },
+        { time: '1/12', value: 62 }
       ];
       this.waterChange = [
         { name: '井08', typeName: '离线', value: 0.7, type: 'offline' },

@@ -4,7 +4,7 @@
       <trend :data="trendData" />
     </box-wrap>
     <box-wrap class="clazz02" title="雨水井" subtext="水位变化趋势">
-      <alarm-total />
+      <alarm-total :data="warnData" />
     </box-wrap>
     <box-wrap class="clazz03" title="雨水井" subtext="水质状况">
       <RadarPart :data="radarData" />
@@ -20,7 +20,7 @@
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
       </el-table>
     </box-wrap>
-    <box-wrap class="clazz06" title="污水井" subtext="设备告警">
+    <box-wrap class="clazz06" title="实时" subtext="心跳数据">
       <el-table class="wrap-table" :data="tableData">
         <el-table-column prop="date" label="时间" width="150" />
         <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
@@ -56,6 +56,7 @@ export default {
   data() {
     return {
       trendData: {},
+      warnData: [],
       tableData: [],
       radarData: [],
       waveformData: []
@@ -73,6 +74,15 @@ export default {
           { name: '污水井告警次数', values: [7, 16, 10, 15, 19, 4, 7, 8, 13, 14] }
         ]
       };
+      this.warnData = [
+        { time: '1/12', value: 45 },
+        { time: '1/12', value: 79 },
+        { time: '1/12', value: 95 },
+        { time: '1/12', value: 39 },
+        { time: '1/12', value: 58 },
+        { time: '1/12', value: 68 },
+        { time: '1/12', value: 62 }
+      ];
       this.tableData = [
         { date: '2019/11/07 12:05:08', name: '井盖', type: '水位过高', address: '上海市普陀区金沙江路 1518 弄' },
         { date: '2019/11/06 02:24:12', name: '井盖34', type: 'COD浓度过高', address: '上海市普陀区金沙江路 1517 弄' },

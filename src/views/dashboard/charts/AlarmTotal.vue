@@ -1,18 +1,42 @@
 <template>
   <div class="content">
     <div class="echart">
-      <v-chart :options="options" />
+      <v-chart ref="echart" :options="options" />
     </div>
   </div>
 </template>
 
 <script>
+import '@/utils/echarts-tooltip-carousel.js';
 const echarts = require('echarts');
 export default {
   name: 'AlarmTotal',
+  props: {
+    data: {
+      type: Array,
+      required: true,
+      default: () => []
+    }
+  },
   data() {
     return {
-      options: {
+      currentPage: 0,
+      counts: 2,
+      total: this.data.length,
+      totalPage: Math.ceil(this.total / this.counts)
+    };
+  },
+  computed: {
+    options() {
+      const data = this.data;
+      const maxValue = Math.max(...data.map(d => d.value || 0));
+      data.map(d => {
+        return {
+          ...d,
+          value: Math.ceil(maxValue)
+        };
+      });
+      const options = {
         tooltip: {
           trigger: 'axis',
           axisPointer: { // 坐标轴指示器，坐标轴触发有效
@@ -32,7 +56,9 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
+          data: data.map(d => {
+            return { value: d.time || '' };
+          }),
           axisTick: {
             alignWithLabel: true
           },
@@ -102,11 +128,20 @@ export default {
             }
 
           },
-          data: [45, 79, 95, 39, 58, 68, 62]
+          data: data.map(d => {
+            return { value: d.value || '' };
+          })
         }
         ]
-      }
-    };
+      };
+      return options;
+    }
+  },
+  mounted() {
+
+  },
+  methods: {
+
   }
 };
 </script>
