@@ -6,7 +6,7 @@
     </div>
     <div class="carousel-container">
       <el-carousel :interval="4000" type="card" height="420px" :autoplay="false" indicator-position="none" arrow="always" @change="changeIndex">
-        <el-carousel-item v-for="(item,index) in sections" :key="index" :class="['in'+item, left === index ? 'left':'', right === index ? 'right':'']">
+        <el-carousel-item v-for="(item,index) in sections" :key="index" :class="['in'+ index, left === index ? 'left':'', right === index ? 'right':'']">
           <div class="medium" :data-item="item.url" @click="hander"> <img :src="item.img"> {{ item.text }}</div>
         </el-carousel-item>
       </el-carousel>
@@ -155,11 +155,18 @@ $light_gray:#eee;
   }
 
   &__arrow {
+    width: 88px;
+    height: 88px;
+    background: url(../../assets/arrow.png) center no-repeat;
     &--left {
-      left: -265px;
+      left: -290px;
+      transform: rotateY(180deg) translateY(-50%);
     }
     &--right {
       right: -190px;
+    }
+    i {
+      display: none;
     }
   }
 }

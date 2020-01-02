@@ -9,7 +9,7 @@
     </div>
     <div class="navigate">
       <div>
-        <router-link to="/example">磁贴管理</router-link>
+        <router-link to="/wellcome">磁贴管理</router-link>
         <router-link to="/dashboard">综合概况</router-link>
       </div>
       <div>
