@@ -30,9 +30,9 @@
     </BoxWrap>
 
     <div class="rect-container">
-      <RectWrap title="设备总数" :value="total.totalDevices || 0" color="#66B3FF" />
-      <RectWrap title="在线设备数" :value="total.onlineDevices || 0" />
-      <RectWrap title="告警设备数" :value="total.warningDevices || 0" color="#FFBF7F" />
+      <RectWrap title="设备总数" :value="total.totalDevices || 0" color="#66B3FF" :total="total.totalDevices" />
+      <RectWrap title="在线设备数" :value="total.onlineDevices || 0" :total="total.totalDevices" />
+      <RectWrap title="告警设备数" :value="total.warningDevices || 0" color="#FFBF7F" :total="total.totalDevices" />
     </div>
   </div>
 </template>
@@ -92,7 +92,12 @@ export default {
           address: '上海市普陀区金沙江路 1516 弄'
         }
       ],
-      total: null
+      total: {
+        totalDevices: null,
+        onlineDevices: null,
+        warningDevices: null,
+        weather: null
+      }
     };
   },
   computed: {
