@@ -38,14 +38,16 @@ export const constantRoutes = [{
 },
 
 {
-  path: '/wellcome',
-  component: () => import('@/views/wellcome/index'),
+  path: '/404',
+  component: () => import('@/views/404'),
   hidden: true
 },
 
 {
-  path: '/404',
-  component: () => import('@/views/404'),
+  path: '/wellcome',
+  name: 'Wellcome',
+  component: () => import('@/views/wellcome/index'),
+  meta: { title: '系统菜单', icon: 'menu' },
   hidden: true
 },
 
@@ -69,7 +71,9 @@ export const constantRoutes = [{
     component: () => import('@/views/dashboard/water/index'),
     meta: { title: '水质监测', icon: 'dashboard' }
   }]
-}, {
+},
+
+{
   path: '/example',
   component: Layout,
   redirect: '/example/table',

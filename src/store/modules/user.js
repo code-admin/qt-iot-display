@@ -28,8 +28,9 @@ const actions = {
       login({ username: username.trim(), password: password })
         .then(response => {
           const { data } = response;
-          commit('SET_TOKEN', data.token);
-          setToken(data.token);
+          commit('SET_NAME', data.userName)
+          commit('SET_TOKEN', data.authToken);
+          setToken(data.authToken);
           resolve();
         })
         .catch(error => {
@@ -48,9 +49,7 @@ const actions = {
           if (!data) {
             reject('Verification failed, please Login again.');
           }
-
           const { name, avatar } = data;
-
           commit('SET_NAME', name);
           commit('SET_AVATAR', avatar);
           resolve(data);
