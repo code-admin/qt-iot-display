@@ -44,9 +44,9 @@ export const constantRoutes = [{
 },
 
 {
-  path: '/wellcome',
-  name: 'Wellcome',
-  component: () => import('@/views/wellcome/index'),
+  path: '/welcome',
+  name: 'Welcome',
+  component: () => import('@/views/welcome/index'),
   meta: { title: '系统菜单', icon: 'menu' },
   hidden: true
 },

@@ -40,10 +40,11 @@ export default {
   },
   computed: {
     options() {
+      const total = (this.total < this.value) ? this.value : this.total;
       const rest = {
         name: 'rest',
         label: { show: false },
-        value: this.total - this.value,
+        value: total - this.value,
         itemStyle: { opacity: 0.1, shadowBlur: 0 }
       };
       const doughnutData = [rest, { name: this.title || '', value: this.value || 0, itemStyle: { opacity: 1 }}];

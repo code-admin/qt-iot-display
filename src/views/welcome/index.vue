@@ -22,7 +22,7 @@ import znswpng from '../../assets/znswpng.png';
 import zhxf from '../../assets/zhxf.png';
 
 export default {
-  name: 'Wellcome',
+  name: 'Welcome',
   data() {
     return {
       cur: 0,
