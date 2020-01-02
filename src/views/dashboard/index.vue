@@ -30,9 +30,9 @@
     </BoxWrap>
 
     <div class="rect-container">
-      <RectWrap title="设备总数" :value="88.88" color="#FFBF7F" unit="万台" :total="88.88" />
-      <RectWrap title="在线设备数" :value="88" unit="万台" />
-      <RectWrap title="告警设备数" :value="65" color="#66B3FF" />
+      <RectWrap title="设备总数" :value="total.totalDevices || 0" color="#66B3FF" />
+      <RectWrap title="在线设备数" :value="total.onlineDevices || 0" />
+      <RectWrap title="告警设备数" :value="total.warningDevices || 0" color="#FFBF7F" />
     </div>
   </div>
 </template>
@@ -47,6 +47,8 @@ import Waveform from '@/components/Waveform';
 import WaterLevel from '@/components/WaterLevel';
 import RectWrap from '@/components/RectWrap';
 import 'echarts/lib/component/tooltip';
+
+import { getTotalDevices } from '@/api/dashboard';
 
 export default {
   name: 'Dashboard',
@@ -89,7 +91,8 @@ export default {
           type: '设备溢满',
           address: '上海市普陀区金沙江路 1516 弄'
         }
-      ]
+      ],
+      total: null
     };
   },
   computed: {
@@ -129,7 +132,19 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.getDeviceNumber();
+  },
   methods: {
+    // 获取设备数量&天气数据
+    getDeviceNumber() {
+      console.log(11111111111111111111111111);
+      getTotalDevices({}).then(res => {
+        if (res.code === 10000) {
+          this.total = res.data;
+        }
+      });
+    },
     callChange(e) {
       const data = this.radarData.map(d => {
         return Object.assign(d, { value: Math.random() * 100 });
