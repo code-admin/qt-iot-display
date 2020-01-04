@@ -45,11 +45,10 @@ export function getDeviceMap(data) {
 }
 
 //  设备类型占比情况 1-正常井 2- 污水井 3- 雨水井
-export function getDeviceModels(data) {
+export function getDeviceModels() {
   return request({
     url: `/summary/getDeviceModels`,
-    method: 'post',
-    data
+    method: 'post'
   });
 }
 
@@ -62,11 +61,12 @@ export function getTotalDevices(data) {
   });
 }
 
-// 污水井水位变化 1-正常井 2- 污水井 3- 雨水井
-export function getWaterLevel(deviceModel) {
+// 污水井水位变化 projectId
+export function getWaterLevel(data) {
   return request({
-    url: `/summary/getWaterLevel/${deviceModel}`,
-    method: 'post'
+    url: `/summary/getWaterLevel`,
+    method: 'post',
+    data
   });
 }
 

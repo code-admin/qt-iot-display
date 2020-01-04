@@ -1,14 +1,14 @@
 <template>
   <div class="dashboard-container">
     <BoxWrap class="clazz01" subtext="设备告警" :select-list="['常规井','雨水井','污水井']" :change="callChange">
-      <RadarPart :data="radarData" />
+      <RadarPart v-if="!!radarData" :data="radarData" />
     </BoxWrap>
 
     <BoxWrap class="clazz02" title="设备" subtext="告警信息">
       <el-table class="wrap-table" :data="tableData">
-        <el-table-column prop="date" label="时间" width="180" />
-        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
-        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="80" />
+        <el-table-column prop="createTime" label="时间" width="160" />
+        <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" width="150" show-overflow-tooltip />
+        <el-table-column prop="alarmName" label="告警类型" class-name="cell-warning" width="80" />
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
       </el-table>
     </BoxWrap>
@@ -21,7 +21,7 @@
       <AlarmTrend :data="alarmTrend" />
     </BoxWrap>
 
-    <BoxWrap class="clazz05" title="污水井" subtext="水位变化">
+    <BoxWrap class="clazz05" title="实时" subtext="水位变化">
       <WaterLevel :data="waterChange" />
     </BoxWrap>
 
@@ -48,7 +48,7 @@ import WaterLevel from '@/components/WaterLevel';
 import RectWrap from '@/components/RectWrap';
 import 'echarts/lib/component/tooltip';
 
-import { getTotalDevices } from '@/api/dashboard';
+import { dailyAlarm, getAlarm, getTotalDevices, getDeviceModels, getAlarmList, getWaterLevel, waterQuality } from '@/api/dashboard';
 
 export default {
   name: 'Dashboard',
@@ -63,35 +63,11 @@ export default {
   },
   data() {
     return {
-      radarData: [],
+      radarMaxVal: 20,
+      radarData: null,
       doughnutData: [],
       waterChange: [],
-      tableData: [
-        {
-          date: '2019/11/07 12:05:08',
-          name: '井盖',
-          type: '水位过高',
-          address: '上海市普陀区金沙江路 1518 弄'
-        },
-        {
-          date: '2019/11/06 02:24:12',
-          name: '井盖34',
-          type: '过度倾斜',
-          address: '上海市普陀区金沙江路 1517 弄'
-        },
-        {
-          date: '2019/11/04 19:02:38',
-          name: '井盖25',
-          type: '电量过低',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          date: '2019/10/01 13:51:52',
-          name: '井盖36',
-          type: '设备溢满',
-          address: '上海市普陀区金沙江路 1516 弄'
-        }
-      ],
+      tableData: [],
       total: {
         totalDevices: null,
         onlineDevices: null,
@@ -104,52 +80,102 @@ export default {
     ...mapGetters(['name'])
   },
   created() {
-    this.radarData = [
-      { name: '水位高度', max: 100, label: '水位告警比例', value: Math.random() * 100, unit: '%' },
-      { name: '电量', max: 100, label: '倾斜告警比例', value: Math.random() * 100, unit: '%' },
-      { name: '溢满', max: 100, label: '溢满告警比例', value: Math.random() * 100, unit: '%' },
-      { name: '设备倾斜', max: 100, label: '电量低告警比例', value: Math.random() * 100, unit: '%' }
-    ];
-    this.doughnutData = [
-      { name: '污水井', value: 36 }, { name: '常规井', value: 36 }, { name: '雨水井', value: 28 }
-    ];
-    this.alarmTrend = [
-      { name: '11/02', value: 45 },
-      { name: '11/03', value: 79 },
-      { name: '11/04', value: 95 },
-      { name: '11/05', value: 39 },
-      { name: '11/06', value: 58 },
-      { name: '11/07', value: 68 },
-      { name: '11/08', value: 62 }
-    ];
+    this.radarData = null;
+    this.doughnutData = [];
+    this.alarmTrend = [];
     this.waterChange = [
-      { name: '井08', typeName: '离线', value: 0.7, type: 'offline' },
-      { name: '井09', typeName: '告警', value: 0.5, type: 'warn' },
-      { name: '井10', typeName: '正常', value: 0.92, type: 'normal' },
-      { name: '井11', typeName: '离线', value: 0.85, type: 'offline' },
-      { name: '井12', typeName: '故障', value: 1.1, type: 'fault' }
+      // { name: '井08', typeName: '离线', value: 0.7, type: 'offline' },
+      // { name: '井09', typeName: '告警', value: 0.5, type: 'warn' },
+      // { name: '井10', typeName: '正常', value: 0.92, type: 'normal' },
+      // { name: '井11', typeName: '离线', value: 0.85, type: 'offline' },
+      // { name: '井12', typeName: '故障', value: 1.1, type: 'fault' }
     ];
     this.waveformData = {
-      reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
+      reportTime: [],
       options: [
-        { name: 'COD氨氮', values: [180, 165, 189.99, 150.12, 163.32, 169.21, 171.28, 165.78, 181.21, 179.21] },
-        { name: 'PH酸碱度', values: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21] }
+        { name: 'COD氨氮', values: [] },
+        { name: 'PH酸碱度', values: [] }
       ]
     };
   },
   mounted() {
     this.getDeviceNumber();
+    this.getAlarmByDeviceModel(1);
+    this.getAlarms();
+    this.getDeviceType();
+    this.getDailyAlarm();
+    this.getWaterLevelList();
+    this.getWaterPros();
   },
   methods: {
+    // 获取告警列表
+    getAlarms() {
+      getAlarmList({ pageIndex: 1, pageSize: 4 }).then(res => {
+        if (res.code === 10000) {
+          this.tableData = res.data;
+        }
+      });
+    },
+    // 雷达图数据
+    getAlarmByDeviceModel(model) {
+      getAlarm(model).then(res => {
+        this.radarData = [
+          { name: '水位高度', max: this.radarMaxVal, label: '水位告警比例', value: res.data.waterLevel, unit: '%' },
+          { name: '电量', max: this.radarMaxVal, label: '倾斜告警比例', value: res.data.isTit, unit: '%' },
+          { name: '溢满', max: this.radarMaxVal, label: '溢满告警比例', value: res.data.overflow, unit: '%' },
+          { name: '设备倾斜', max: this.radarMaxVal, label: '电量低告警比例', value: res.data.lowBattery, unit: '%' },
+          { name: '设备离线', max: this.radarMaxVal, label: '设备离线比例', value: res.data.offline, unit: '%' }
+        ];
+      });
+    },
     // 获取设备数量&天气数据
     getDeviceNumber() {
-      console.log(11111111111111111111111111);
       getTotalDevices({}).then(res => {
         if (res.code === 10000) {
           this.total = res.data;
         }
       });
     },
+    // 设备告警趋势
+    getDailyAlarm() {
+      dailyAlarm(1).then(res => {
+        if (res.code === 10000) {
+          this.alarmTrend = res.data;
+        }
+      });
+    },
+
+    // 获取设备占比情况
+    getDeviceType() {
+      getDeviceModels().then(res => {
+        this.doughnutData = [
+          { name: '常规井', value: res.data.normalWell },
+          { name: '雨水井', value: res.data.sewageWell },
+          { name: '污水井', value: res.data.rainWell }
+        ];
+      });
+    },
+    // 实时水位变化
+    getWaterLevelList() {
+      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 5 }).then(res => {
+        if (res.code === 10000) this.waterChange = res.data;
+      });
+    },
+    // 获取水质参数
+    getWaterPros() {
+      waterQuality().then(res => {
+        if (res.code === 10000) {
+          this.waveformData = {
+            reportTime: res.data.times,
+            options: [
+              { name: 'COD氨氮', values: res.data.cod },
+              { name: 'PH酸碱度', values: res.data.ph }
+            ]
+          };
+        }
+      });
+    },
+
     callChange(e) {
       const data = this.radarData.map(d => {
         return Object.assign(d, { value: Math.random() * 100 });

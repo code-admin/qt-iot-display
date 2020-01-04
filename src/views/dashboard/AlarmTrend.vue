@@ -41,7 +41,7 @@ export default {
             color: '#fff'
           },
           axisLine: { lineStyle: { color: '#ffffff4d' }},
-          data: data.map(d => d.name || '')
+          data: data.map(d => d.reportTime || '')
         },
         axisLine: {
           lineStyle: { width: 20 }
@@ -56,7 +56,7 @@ export default {
           {
             type: 'line',
             smooth: true,
-            data: data,
+            data: data.map(d => d.alarmNumber || 0),
             symbol: 'circle',
             symbolSize: 0.1,
             smoothMonotone: 'x',
@@ -79,7 +79,7 @@ export default {
           {
             type: 'bar',
             barMaxWidth: 18,
-            data: data,
+            data: data.map(d => d.alarmNumber || 0),
             itemStyle: {
               barBorderRadius: 14,
               color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: '#4FEBC6' }, { offset: 1, color: '#28C9D3' }] }

@@ -1,16 +1,27 @@
 <template>
   <div class="amap-page-container">
-    <el-amap ref="map" class="amap-box" vid="device-map-view" :amap-manager="amapManager" :events="events" :map-style="mapStyle" :pitch="50" view-mode="2D" :center="mapCenter" :zoom="zoom">
+    <el-amap
+      ref="map"
+      class="amap-box"
+      vid="device-map-view"
+      :amap-manager="amapManager"
+      :events="events"
+      :map-style="mapStyle"
+      :pitch="50"
+      view-mode="2D"
+      :center="mapCenter"
+      :zoom="zoom"
+    >
       <el-amap-marker
         v-for="(marker, index) in markers"
         :key="index"
-        :position="marker.position"
+        :position="[marker.amapLongitude, marker.amapLatitude]"
         :events="{click: ()=>{handleMarker(marker)}}"
-        :content="getContentByDeviceStatus(marker.deviceType, marker.deviceStatus)"
+        :content="getContentByDeviceStatus(marker.deviceModel, marker.deviceStatus)"
         :vid="index"
         title="点击查看设备信息"
         :offset="[-14,-14]"
-        :label="marker.label"
+        :label="{ content: marker.deviceName, offset: [-30, -25] }"
       />
     </el-amap>
 
@@ -34,11 +45,12 @@
 </template>
 
 <script>
-import {
-  AMapManager
-} from 'vue-amap';
+import { AMapManager } from 'vue-amap';
 import LiquidFill from '@/components/LiquidFill';
 import TortuousLine from '@/components/TortuousLine';
+
+import { getDeviceMap } from '@/api/dashboard';
+
 const amapManager = new AMapManager();
 export default {
   components: {
@@ -47,6 +59,7 @@ export default {
   },
   data() {
     return {
+      isloading: false,
       dialogVisible: false,
       amapManager,
       // 可以根据项目 经纬度来设置地图中心点
@@ -88,35 +101,36 @@ export default {
   computed: {
     getContentByDeviceStatus() {
       return function(deviceType, status) {
+        // 0 未激活  1  正常  2告警   3.离线
         // 常规井
-        if (deviceType === 1 && status === 1) {
+        if (deviceType === 1 && status === 0) {
+          return `<img src='${require('../../assets/jg_white.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 1) {
           return `<img src='${require('../../assets/jg_green.png')}' style='width:40px;height:40px;'></img>`;
         } else if (deviceType === 1 && status === 2) {
-          return `<img src='${require('../../assets/jg_red.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 1 && status === 3) {
-          return `<img src='${require('../../assets/jg_white.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 1 && status === 4) {
           return `<img src='${require('../../assets/jg_yellow.png')}' style='width:40px;height:40px;'></img>`;
-        }
-        // 雨水井
-        if (deviceType === 2 && status === 1) {
-          return `<img src='${require('../../assets/ys_green.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 2 && status === 2) {
-          return `<img src='${require('../../assets/ys_red.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 2 && status === 3) {
-          return `<img src='${require('../../assets/ys_white.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 2 && status === 4) {
-          return `<img src='${require('../../assets/ys_yellow.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 1 && status === 3) {
+          return `<img src='${require('../../assets/jg_red.png')}' style='width:40px;height:40px;'></img>`;
         }
         // 污水井
-        if (deviceType === 3 && status === 1) {
-          return `<img src='${require('../../assets/ws_green.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 3 && status === 2) {
-          return `<img src='${require('../../assets/ws_red.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 3 && status === 3) {
+        if (deviceType === 2 && status === 0) {
           return `<img src='${require('../../assets/ws_white.png')}' style='width:40px;height:40px;'></img>`;
-        } else if (deviceType === 3 && status === 4) {
+        } else if (deviceType === 2 && status === 1) {
+          return `<img src='${require('../../assets/ws_green.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 2 && status === 2) {
           return `<img src='${require('../../assets/ws_yellow.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 2 && status === 3) {
+          return `<img src='${require('../../assets/ws_red.png')}' style='width:40px;height:40px;'></img>`;
+        }
+        // 雨水井
+        if (deviceType === 3 && status === 0) {
+          return `<img src='${require('../../assets/ys_white.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 3 && status === 1) {
+          return `<img src='${require('../../assets/ys_green.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 3 && status === 2) {
+          return `<img src='${require('../../assets/ys_yellow.png')}' style='width:40px;height:40px;'></img>`;
+        } else if (deviceType === 3 && status === 3) {
+          return `<img src='${require('../../assets/ys_red.png')}' style='width:40px;height:40px;'></img>`;
         }
         return `<img src='${require('../../assets/jg_white.png')}' style='width:40px;height:40px;'></img>`;
       };
@@ -178,66 +192,17 @@ export default {
       });
     },
     getMarkerList: function() {
-      this.markers = [
-        { position: [120.452218, 27.525692], deviceType: 1, deviceStatus: 1, label: { content: '井盖 #11', offset: [-30, -25] }},
-        {
-          position: [120.451188, 27.527262],
-          deviceType: 2,
-          deviceStatus: 2,
-          label: {
-            content: '井盖 #12',
-            offset: [-30, -25]
-          }
-        },
-        {
-          position: [120.451617, 27.526658],
-          deviceType: 3,
-          deviceStatus: 1,
-          label: {
-            content: '井盖 #13',
-            offset: [-30, -25]
-          }
-        },
-        {
-          position: [120.451934, 27.526206],
-          deviceType: 1,
-          deviceStatus: 1,
-          label: {
-            content: '井盖 #14',
-            offset: [-30, -25]
-          }
-        },
-        {
-          position: [120.453784, 27.523256],
-          deviceType: 1,
-          deviceStatus: 2,
-          label: {
-            content: '井盖 #15',
-            offset: [-10, -25]
-          }
-        },
-        {
-          position: [120.452738, 27.524712],
-          deviceType: 1,
-          deviceStatus: 1,
-          label: {
-            content: '井盖 #16',
-            offset: [-30, -25]
-          }
-        },
-        {
-          position: [120.453511, 27.52378],
-          deviceType: 1,
-          deviceStatus: 1,
-          label: {
-            content: '井盖 #17',
-            offset: [-30, -25]
-          }
-        }
-      ];
+      this.isloading = false;
+      getDeviceMap({}).then(res => {
+        this.markers = res.data;
+        this.isloading = true;
+      });
+      // this.markers = [
+      //   { position: [120.452218, 27.525692], deviceType: 1, deviceStatus: 1, label: { content: '井盖 #11', offset: [-30, -25] }}
+      // ];
     },
     handleMarker(marker) {
-      this.deviceName = marker.label.content || '';
+      this.deviceName = marker.deviceName || '';
       this.dialogVisible = !this.dialogVisible;
       // console.log(marker);
     }
