@@ -26,7 +26,7 @@
     </el-amap>
 
     <!-- 窗口信息 -->
-    <qt-dialog :visible.sync="dialogVisible" highlight-title="88#污水井" title="设备置信参数">
+    <qt-dialog :visible.sync="dialogVisible" :highlight-title="deviceName" title="设备置信参数">
       <div class="box-warp">
         <div class="liquid-container">
           <LiquidFill title="温度" value="28.7℃" percent="0.65" color="rgba(120, 255, 100, 0.3)" />

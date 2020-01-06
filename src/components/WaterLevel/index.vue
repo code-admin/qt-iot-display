@@ -100,7 +100,7 @@ export default {
                     show: true,
                     color: 'white',
                     fontSize: 14,
-                    formatter: bar.name
+                    formatter: bar.name.substring(0, 5)
                   }
                 };
               })
