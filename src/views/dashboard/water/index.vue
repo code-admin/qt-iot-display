@@ -44,6 +44,7 @@ import RadarPart from '@/components/RadarPart';
 import AlarmTotal from '../charts/AlarmTotal';
 import trend from './Trend';
 import Waveform from '@/components/Waveform';
+import { dailyAlarm } from '@/api/dashboard';
 export default {
   components: {
     BoxWrap,
@@ -64,6 +65,7 @@ export default {
   },
   created() {
     this.initData();
+    this.getDailyAlarm();
   },
   methods: {
     initData() {
@@ -102,8 +104,15 @@ export default {
           { name: 'PH酸碱度', values: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21] }
         ]
       };
+    },
+    // 井盖告警总数量
+    getDailyAlarm() {
+      dailyAlarm({}).then(res => {
+        if (res.code === 10000) {
+          console.log(res.data);
+        }
+      });
     }
-
   }
 };
 </script>

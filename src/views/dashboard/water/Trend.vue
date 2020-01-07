@@ -74,7 +74,7 @@ export default {
         },
         yAxis: [{
           type: 'value',
-          name: 'mg/L',
+          // name: 'mg/L',
           nameTextStyle: {
             color: '#ffffff'
           },
