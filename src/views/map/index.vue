@@ -26,7 +26,7 @@
     </el-amap>
 
     <!-- 窗口信息 -->
-    <qt-dialog :visible.sync="dialogVisible" :highlight-title="deviceName" title="设备置信参数">
+    <qt-dialog :visible.sync="dialogVisible" :highlight-title="deviceName" title="水质参数信息">
       <div class="box-warp">
         <div class="liquid-container">
           <LiquidFill title="温度" value="28.7℃" :percent="0.65" color="rgba(120, 255, 100, 0.3)" />
@@ -91,6 +91,7 @@ export default {
           }
         }
       }],
+      // 高德开发平台自定义样式
       mapStyle: 'amap://styles/f8fa7a6a6b7eb457f6bcdcb91abd0529',
       markers: [],
       map: null,

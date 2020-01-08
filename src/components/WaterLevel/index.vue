@@ -46,7 +46,8 @@ export default {
             label: {
               backgroundColor: '#6a7985'
             }
-          }
+          },
+          formatter: '{b0}<br /> 水距 :{c0} (cm)'
         },
         xAxis: {
           axisLabel: {

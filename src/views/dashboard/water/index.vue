@@ -110,6 +110,10 @@ export default {
     this.getWaterLevelList();
     this.getCodData();
     this.getNHAandPH();
+    setInterval(() => {
+      this.getCodData();
+      this.getNHAandPH();
+    }, 60000);
   },
   methods: {
     // 设备状况
@@ -184,6 +188,11 @@ export default {
       getAlarmList({ pageIndex: 1, pageSize: 100 }).then(res => {
         if (res.code === 10000) {
           this.tableData = res.data;
+          // 定时刷新排序
+          setInterval(() => {
+            this.tableData.push(this.tableData[0]);// 把第一条数据插入数组最有一条
+            this.tableData.shift();// 删除数组中第一条数据
+          }, 2000);
         }
       });
     },

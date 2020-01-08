@@ -152,7 +152,7 @@ export default {
 
         series: [
           {
-            name: itmeName[0],
+            name: data.options[1].name,
             type: 'line',
             yAxisIndex: 0, // 使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
             smooth: true,
@@ -163,7 +163,7 @@ export default {
             },
             data: data.options[1].values
           }, {
-            name: itmeName[1],
+            name: data.options[0].name,
             type: 'line',
             yAxisIndex: 1,
             smooth: true,
