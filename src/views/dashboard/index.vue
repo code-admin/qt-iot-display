@@ -83,13 +83,7 @@ export default {
     this.radarData = null;
     this.doughnutData = [];
     this.alarmTrend = [];
-    this.waterChange = [
-      // { name: '井08', typeName: '离线', value: 0.7, type: 'offline' },
-      // { name: '井09', typeName: '告警', value: 0.5, type: 'warn' },
-      // { name: '井10', typeName: '正常', value: 0.92, type: 'normal' },
-      // { name: '井11', typeName: '离线', value: 0.85, type: 'offline' },
-      // { name: '井12', typeName: '故障', value: 1.1, type: 'fault' }
-    ];
+    this.waterChange = [];
     this.waveformData = {
       reportTime: [],
       options: [

@@ -74,7 +74,8 @@ export default {
         },
         yAxis: [{
           type: 'value',
-          // name: 'mg/L',
+          name: '次/天',
+          splitNumber: 4,
           nameTextStyle: {
             color: '#ffffff'
           },
@@ -103,31 +104,34 @@ export default {
               fontSize: 13
             }
           }
-        }, {
-          type: 'value',
-          gridIndex: 0,
-          splitLine: {
-            show: false
-          },
-          axisLine: {
-            show: true,
-            lineStyle: {
-              color: '#354F60',
-              width: 1
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            show: true,
-            textStyle: {
-              color: '#ffffff',
-              fontFamily: 'Microsoft YaHei',
-              fontSize: 13
-            }
-          }
-        }],
+        }
+        // {
+        //   type: 'value',
+        //   splitNumber: 4,
+        //   gridIndex: 0,
+        //   splitLine: {
+        //     show: false
+        //   },
+        //   axisLine: {
+        //     show: true,
+        //     lineStyle: {
+        //       color: '#354F60',
+        //       width: 1
+        //     }
+        //   },
+        //   axisTick: {
+        //     show: false
+        //   },
+        //   axisLabel: {
+        //     show: true,
+        //     textStyle: {
+        //       color: '#ffffff',
+        //       fontFamily: 'Microsoft YaHei',
+        //       fontSize: 13
+        //     }
+        //   }
+        // }
+        ],
         series: [{
           name: this.data.options[0].name,
           type: 'line',
@@ -160,7 +164,7 @@ export default {
         }, {
           name: this.data.options[1].name,
           type: 'line',
-          yAxisIndex: 1, // 使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
+          yAxisIndex: 0, // 使用的 y 轴的 index，在单个图表实例中存在多个 y轴的时候有用
           smooth: true,
           symbol: 'none',
           smoothMonotone: 'x',

@@ -76,7 +76,7 @@ export default {
             symbolSize: 0.01,
             showSymbol: true,
             smoothMonotone: 'x',
-            label: { show: true, formatter: '{c}m', color: '#fff' },
+            label: { show: true, formatter: '{c}m', color: '#ffffff' },
             itemStyle: { color: '#00FFFF' }
           },
           {
@@ -100,7 +100,7 @@ export default {
                     show: true,
                     color: 'white',
                     fontSize: 14,
-                    formatter: bar.name.substring(0, 5)
+                    formatter: bar.name.substring(0, 5) + '\n' + bar.name.substring(6, 10)
                   }
                 };
               })

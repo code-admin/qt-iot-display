@@ -9,6 +9,7 @@
 <script>
 import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
+import 'echarts/lib/component/legend';
 import 'echarts/lib/chart/bar';
 export default {
   name: 'Waveform',
@@ -61,6 +62,11 @@ export default {
               color: '#ffffff',
               fontFamily: 'Microsoft YaHei',
               fontSize: 13
+            },
+            formatter: function(value, index) {
+              let str = '';
+              str = value.substring(0, 10) + '\n' + value.substring(11, 19);
+              return str;
             }
           },
           axisTick: {

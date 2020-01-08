@@ -32,6 +32,25 @@ export default {
           bottom: '1%',
           containLabel: true
         },
+
+        // legend: {
+        //   data: ['温度', 'COD', 'DO浓度'],
+        //   textStyle: {
+        //     color: '#ffffff'
+        //   }
+        // },
+
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            label: {
+              backgroundColor: '#6a7985'
+            }
+          }
+          // formatter: '{a0}: {c0}(mg/L) <br />{a1}: {c1} (ph)'
+        },
+
         xAxis: [{
           type: 'category',
           boundaryGap: false,

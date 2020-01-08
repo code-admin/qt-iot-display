@@ -1,116 +1,196 @@
 <template>
   <div class="dashboard-container">
-    <box-wrap class="clazz01" title="污水井" subtext="告警变化趋势">
+    <box-wrap class="clazz01" title="雨污" subtext="告警变化趋势">
       <trend :data="trendData" />
     </box-wrap>
-    <box-wrap class="clazz02" title="雨水井" subtext="水位变化趋势">
-      <alarm-total :data="warnData" />
+    <box-wrap class="clazz02" title="污水监测" subtext="参数">
+      <Monitor :data="codData" />
     </box-wrap>
-    <box-wrap class="clazz03" title="雨水井" subtext="水质状况">
+    <box-wrap class="clazz03" title="雨污" subtext="告警状况">
       <RadarPart :data="radarData" />
     </box-wrap>
-    <box-wrap class="clazz04" title="雨水井" subtext="水质参数">
-      <waveform :data="waveformData" />
+    <box-wrap class="clazz04" title="雨水监测" subtext="参数">
+      <waveform :data="nhphData" />
     </box-wrap>
-    <box-wrap class="clazz05" title="雨污水井" subtext="告警信息">
+    <box-wrap class="clazz05" title="雨污" subtext="实时告警信息">
       <el-table class="wrap-table" :data="tableData">
-        <el-table-column prop="date" label="时间" width="150" />
-        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
-        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="110" />
+        <el-table-column prop="createTime" label="时间" width="160" />
+        <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" width="150" show-overflow-tooltip />
+        <el-table-column prop="alarmName" label="告警类型" class-name="cell-warning" width="80" />
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
       </el-table>
     </box-wrap>
-    <box-wrap class="clazz06" title="实时" subtext="心跳数据">
-      <el-table class="wrap-table" :data="tableData">
-        <el-table-column prop="date" label="时间" width="150" />
-        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
-        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="110" />
-        <el-table-column prop="address" label="地址" show-overflow-tooltip />
-      </el-table>
+    <box-wrap class="clazz06" title="实时" subtext="水位变化">
+      <WaterLevel :data="waterChange" />
     </box-wrap>
 
     <div class="rect-container">
-      <RectWrap title="设备总数" :value="88.88" color="#FFBF7F" unit="万台" :total="88.88" />
-      <RectWrap title="在线设备数" :value="88" unit="万台" />
-      <RectWrap title="告警设备数" :value="65" color="#66B3FF" />
+      <RectWrap title="设备总数" :value="total.totalDevices || 0" color="#66B3FF" :total="total.totalDevices" />
+      <RectWrap title="在线设备数" :value="total.onlineDevices || 0" :total="total.totalDevices" />
+      <RectWrap title="告警设备数" :value="total.warningDevices || 0" color="#FFBF7F" :total="total.totalDevices" />
     </div>
   </div>
 </template>
 
 <script>
 import BoxWrap from '@/components/BoxWrap';
+import Monitor from './Monitor';
 import RectWrap from '@/components/RectWrap';
 import RadarPart from '@/components/RadarPart';
-import AlarmTotal from '../charts/AlarmTotal';
 import trend from './Trend';
 import Waveform from '@/components/Waveform';
-import { dailyAlarm } from '@/api/dashboard';
+import WaterLevel from '@/components/WaterLevel';
+
+import { getTotalDevices, getWaterLevel } from '@/api/dashboard';
+import { getAlarmChange, getAlarmList, getPHList, getCodList, getAlarmPercentage } from '@/api/water';
 export default {
   components: {
     BoxWrap,
+    Monitor,
     RectWrap,
     trend,
-    AlarmTotal,
     RadarPart,
-    Waveform
+    Waveform,
+    WaterLevel
   },
   data() {
     return {
-      trendData: {},
+      trendData: {
+        reportTime: [],
+        options: [
+          { name: '雨水井告警次数', values: [] },
+          { name: '污水井告警次数', values: [] }
+        ]
+      },
       warnData: [],
       tableData: [],
-      radarData: [],
-      waveformData: []
+      radarData: [
+        { name: 'COD告警', max: 15, label: 'COD告警比例', value: 0, unit: '%' },
+        { name: '氨氮告警', max: 15, label: '氨氮告警比例', value: 0, unit: '%' },
+        { name: 'PH告警', max: 15, label: 'PH告警比例', value: 0, unit: '%' },
+        { name: '水位告警', max: 15, label: '水位告警比例', value: 0, unit: '%' }
+      ],
+      codData: {
+        reportTime: [],
+        options: [
+          { name: '温度', values: [] },
+          { name: 'COD', values: [] }
+        ]
+      },
+      nhphData: {
+        reportTime: [],
+        options: [
+          { name: '氨氮', values: [] },
+          { name: 'PH酸碱度', values: [] }
+        ]
+      },
+      waterChange: [],
+      total: {
+        totalDevices: null,
+        onlineDevices: null,
+        warningDevices: null,
+        weather: null
+      }
     };
   },
   created() {
-    this.initData();
-    this.getDailyAlarm();
+    this.nhphData = {
+      reportTime: [],
+      options: [
+        { name: '氨氮', values: [] },
+        { name: 'PH酸碱度', values: [] }
+      ]
+    };
+  },
+  mounted() {
+    this.getStatusData();
+    this.getChange();
+    this.getDeviceNumber();
+    this.getAlarms();
+    this.getWaterLevelList();
+    this.getCodData();
+    this.getNHAandPH();
   },
   methods: {
-    initData() {
-      this.trendData = {
-        reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
-        options: [
-          { name: '雨水井告警次数', values: [5, 8, 4, 11, 15, 16, 9, 6, 13, 8] },
-          { name: '污水井告警次数', values: [7, 16, 10, 15, 19, 4, 7, 8, 13, 14] }
-        ]
-      };
-      this.warnData = [
-        { time: '1/12', value: 45 },
-        { time: '1/12', value: 79 },
-        { time: '1/12', value: 95 },
-        { time: '1/12', value: 39 },
-        { time: '1/12', value: 58 },
-        { time: '1/12', value: 68 },
-        { time: '1/12', value: 62 }
-      ];
-      this.tableData = [
-        { date: '2019/11/07 12:05:08', name: '井盖', type: '水位过高', address: '上海市普陀区金沙江路 1518 弄' },
-        { date: '2019/11/06 02:24:12', name: '井盖34', type: 'COD浓度过高', address: '上海市普陀区金沙江路 1517 弄' },
-        { date: '2019/11/04 19:02:38', name: '井盖25', type: 'PH酸碱度过高', address: '上海市普陀区金沙江路 1519 弄' },
-        { date: '2019/10/01 13:51:52', name: '井盖36', type: '设备溢满', address: '上海市普陀区金沙江路 1516 弄' }
-      ];
-      this.radarData = [
-        { name: '水位高度', max: 100, label: '水位告警比例', value: Math.random() * 100, unit: '%' },
-        { name: '电量', max: 100, label: '倾斜告警比例', value: Math.random() * 100, unit: '%' },
-        { name: '溢满', max: 100, label: '溢满告警比例', value: Math.random() * 100, unit: '%' },
-        { name: '设备倾斜', max: 100, label: '电量低告警比例', value: Math.random() * 100, unit: '%' }
-      ];
-      this.waveformData = {
-        reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
-        options: [
-          { name: 'COD氨氮', values: [180, 165, 189.99, 150.12, 163.32, 169.21, 171.28, 165.78, 181.21, 179.21] },
-          { name: 'PH酸碱度', values: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21] }
-        ]
-      };
-    },
-    // 井盖告警总数量
-    getDailyAlarm() {
-      dailyAlarm({}).then(res => {
+    // 设备状况
+    getStatusData() {
+      getAlarmPercentage({}).then(res => {
         if (res.code === 10000) {
-          console.log(res.data);
+          const total = res.data.cod + res.data.ammoniaNitrogen + res.data.ph + res.data.waterLevel;
+          this.radarData = [
+            { name: 'COD告警', max: total, label: 'COD告警比例', value: res.data.cod, unit: '%' },
+            { name: '氨氮告警', max: total, label: '氨氮告警比例', value: res.data.ammoniaNitrogen, unit: '%' },
+            { name: 'PH告警', max: total, label: 'PH告警比例', value: res.data.ph, unit: '%' },
+            { name: '水位告警', max: total, label: '水位告警比例', value: res.data.waterLevel, unit: '%' }
+          ];
         }
+      });
+    },
+    // 变化趋势
+    getChange() {
+      getAlarmChange({}).then(res => {
+        if (res.code === 10000) {
+          this.trendData = {
+            reportTime: res.data.reportTime,
+            options: [
+              { name: '雨水井告警次数', values: res.data.rainAlarmNumber },
+              { name: '污水井告警次数', values: res.data.sewageAlarmNumber }
+            ]
+          };
+        }
+      });
+    },
+
+    // 获取温度&cod
+    getCodData() {
+      getCodList({}).then(res => {
+        if (res.code === 10000) {
+          this.codData = {
+            reportTime: res.data.reportTime,
+            options: [
+              { name: '温度', values: res.data.temperature },
+              { name: 'COD', values: res.data.codAlarmNumber }
+            ]
+          };
+        }
+      });
+    },
+    // 获取氨氮&PH
+    getNHAandPH() {
+      getPHList({}).then(res => {
+        if (res.code === 10000) {
+          this.nhphData = {
+            reportTime: res.data.reportTime,
+            options: [
+              { name: '氨氮', values: res.data.nitrogenAlarmNumber },
+              { name: 'PH酸碱度', values: res.data.phAlarmNumber }
+            ]
+          };
+        }
+      });
+    },
+
+    // 获取设备数量&天气数据
+    getDeviceNumber() {
+      getTotalDevices({}).then(res => {
+        if (res.code === 10000) {
+          this.total = res.data;
+        }
+      });
+    },
+
+    // 获取告警列表
+    getAlarms() {
+      getAlarmList({ pageIndex: 1, pageSize: 100 }).then(res => {
+        if (res.code === 10000) {
+          this.tableData = res.data;
+        }
+      });
+    },
+    // 实时水位变化
+    getWaterLevelList() {
+      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 5 }).then(res => {
+        if (res.code === 10000) this.waterChange = res.data;
       });
     }
   }

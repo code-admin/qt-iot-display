@@ -62,7 +62,7 @@ export default {
     },
     dataInfo() {
       return this.data.map(d => {
-        return { label: d.label || '', value: d.value.toFixed(2) || 0, unit: d.unit || '%' };
+        return { label: d.label || '', value: (d.value / d.max * 100).toFixed(2) || 0, unit: d.unit || '%' };
       });
     }
   }

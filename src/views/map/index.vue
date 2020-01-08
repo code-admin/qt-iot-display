@@ -29,12 +29,12 @@
     <qt-dialog :visible.sync="dialogVisible" :highlight-title="deviceName" title="设备置信参数">
       <div class="box-warp">
         <div class="liquid-container">
-          <LiquidFill title="温度" value="28.7℃" percent="0.65" color="rgba(120, 255, 100, 0.3)" />
-          <LiquidFill title="COD" value="177.162" percent="0.35" unit="mg/L" />
-          <LiquidFill title="DO浓度" value="0.471" percent="0.15" unit="mg/L" />
-          <LiquidFill title="DO百分比" value="6.11%" percent="0.17" />
-          <LiquidFill title="PH值" value="7.72" percent="0.52" />
-          <LiquidFill title="氨氮值" value="0.43" percent="0.12" unit="mg/L" color="rgba(255, 255, 255, 0.3)" />
+          <LiquidFill title="温度" value="28.7℃" :percent="0.65" color="rgba(120, 255, 100, 0.3)" />
+          <LiquidFill title="COD" value="177.162" :percent="0.35" unit="mg/L" />
+          <LiquidFill title="DO浓度" value="0.471" :percent="0.15" unit="mg/L" />
+          <LiquidFill title="DO百分比" value="6.11%" :percent="0.17" />
+          <LiquidFill title="PH值" value="7.72" :percent="0.52" />
+          <LiquidFill title="氨氮值" value="0.43" :percent="0.12" unit="mg/L" color="rgba(255, 255, 255, 0.3)" />
         </div>
         <div class="tortuous-container">
           <TortuousLine :data="{}" />
