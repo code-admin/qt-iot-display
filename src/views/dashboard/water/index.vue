@@ -13,7 +13,7 @@
       <waveform :data="nhphData" />
     </box-wrap>
     <box-wrap class="clazz05" title="雨污" subtext="实时告警信息">
-      <el-table class="wrap-table" :data="tableData">
+      <el-table class="wrap-table" :data="tableData" max-height="220px">
         <el-table-column prop="createTime" label="时间" width="160" />
         <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" width="150" show-overflow-tooltip />
         <el-table-column prop="alarmName" label="告警类型" class-name="cell-warning" width="80" />
@@ -185,16 +185,28 @@ export default {
 
     // 获取告警列表
     getAlarms() {
-      getAlarmList({ pageIndex: 1, pageSize: 100 }).then(res => {
+      getAlarmList({ pageIndex: 1, pageSize: 10 }).then(res => {
         if (res.code === 10000) {
           this.tableData = res.data;
-          // 定时刷新排序
-          setInterval(() => {
-            this.tableData.push(this.tableData[0]);// 把第一条数据插入数组最有一条
-            this.tableData.shift();// 删除数组中第一条数据
-          }, 2000);
+          this.scrollData('.wrap-table', this.tableData);
         }
       });
+    },
+    scrollData: function(tableClass, tableData) {
+      const selector = tableClass + ' .el-table__body-wrapper';
+      const scrollElement = document.querySelectorAll(selector);
+      if (scrollElement.length && tableData.length > 4) {
+        const removeItem = tableData.splice(-1, 1);
+        scrollElement[0].style.transition = 'all .8s';
+        scrollElement[0].style.marginTop = '44px';
+
+        setTimeout(() => {
+          tableData.unshift(removeItem[0]);
+          scrollElement[0].style.transition = 'all 0s ease 0s';
+          scrollElement[0].style.marginTop = '0';
+        }, 800);
+        setTimeout(() => this.scrollData(tableClass, tableData), 4000);
+      }
     },
     // 实时水位变化
     getWaterLevelList() {
