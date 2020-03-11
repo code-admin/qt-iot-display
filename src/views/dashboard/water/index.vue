@@ -13,7 +13,7 @@
       <waveform :data="nhphData" />
     </box-wrap>
     <box-wrap class="clazz05" title="雨污" subtext="实时告警信息">
-      <el-table class="wrap-table" :data="tableData" max-height="220px">
+      <el-table class="wrap-table scroll-content" :data="tableData" max-height="220px">
         <el-table-column prop="createTime" label="时间" width="160" />
         <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" width="150" show-overflow-tooltip />
         <el-table-column prop="alarmName" label="告警类型" class-name="cell-warning" width="80" />
@@ -43,6 +43,8 @@ import WaterLevel from '@/components/WaterLevel';
 
 import { getTotalDevices, getWaterLevel } from '@/api/dashboard';
 import { getAlarmChange, getAlarmList, getPHList, getCodList, getAlarmPercentage } from '@/api/water';
+
+import { scrollData } from '@/utils/animation';
 export default {
   components: {
     BoxWrap,
@@ -188,33 +190,9 @@ export default {
       getAlarmList({ pageIndex: 1, pageSize: 10 }).then(res => {
         if (res.code === 10000) {
           this.tableData = res.data;
-          setInterval(() => this.scrollData('.wrap-table', this.tableData), 4000);
+          setInterval(() => scrollData('.scroll-content', this.tableData), 4000);
         }
       });
-    },
-    scrollData: function(tableClass, tableData) {
-      const child = 'tr.el-table__row:first-of-type';
-      const selector = tableClass + ' .el-table__body-wrapper';
-      const scrollElement = document.querySelectorAll(selector);
-      if (scrollElement.length && tableData.length > 4) {
-        const removeItem = tableData.splice(-1, 1);
-        scrollElement[0].style.transition = 'all 0s';
-        scrollElement[0].style.marginTop = '-44px';
-        tableData.unshift(removeItem[0]);
-
-        const firstRow = scrollElement[0].querySelectorAll(child);
-        firstRow[0].style.transition = 'all 0s';
-        firstRow[0].style.opacity = '0';
-
-        setTimeout(() => {
-          scrollElement[0].style.transition = 'all .8s';
-          scrollElement[0].style.marginTop = '0px';
-
-          firstRow[0].style.transition = 'all 2.8s';
-          firstRow[0].style.opacity = '1';
-        }, 200);
-        // setTimeout(() => this.scrollData(tableClass, tableData), 4000);
-      }
     },
     // 实时水位变化
     getWaterLevelList() {

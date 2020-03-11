@@ -4,7 +4,6 @@
       <waveform :data="waveformData" />
     </box-wrap>
     <box-wrap class="clazz02" title="井盖" subtext="设备告警排行">
-
       <el-row :gutter="20" class="tied">
         <el-col :span="12">
           <el-table class="wrap-table" :data="top1">
@@ -34,10 +33,10 @@
       <water-level :data="waterChange" />
     </box-wrap>
     <box-wrap class="clazz05" title="井盖" subtext="告警信息">
-      <el-table class="wrap-table" :data="tableData">
-        <el-table-column prop="date" label="时间" width="180" />
-        <el-table-column prop="name" label="设备名称" class-name="cell-primary" width="80" />
-        <el-table-column prop="type" label="告警类型" class-name="cell-warning" width="80" />
+      <el-table class="wrap-table scroll-content" :data="tableData">
+        <el-table-column prop="createTime" label="时间" width="160" />
+        <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" width="150" show-overflow-tooltip />
+        <el-table-column prop="alarmName" label="告警类型" class-name="cell-warning" width="80" />
         <el-table-column prop="address" label="地址" show-overflow-tooltip />
       </el-table>
     </box-wrap>
@@ -46,9 +45,9 @@
     </box-wrap>
 
     <div class="rect-container">
-      <RectWrap title="设备总数" :value="88.88" color="#FFBF7F" unit="万台" :total="88.88" />
-      <RectWrap title="在线设备数" :value="88" unit="万台" />
-      <RectWrap title="告警设备数" :value="65" color="#66B3FF" />
+      <RectWrap title="设备总数" :value="total.totalDevices || 0" color="#66B3FF" :total="total.totalDevices" />
+      <RectWrap title="在线设备数" :value="total.onlineDevices || 0" :total="total.totalDevices" />
+      <RectWrap title="告警设备数" :value="total.warningDevices || 0" color="#FFBF7F" :total="total.totalDevices" />
     </div>
   </div>
 </template>
@@ -60,6 +59,10 @@ import AlarmTotal from '../charts/AlarmTotal';
 import Doughnut from '@/components/Doughnut';
 import Waveform from '@/components/Waveform';
 import WaterLevel from '@/components/WaterLevel';
+import { getTotalDevices, getWaterLevel } from '@/api/dashboard';
+import { getAlarmList } from '@/api/water';
+
+import { scrollData } from '@/utils/animation';
 export default {
   name: 'Wellcover',
   components: {
@@ -73,13 +76,7 @@ export default {
   data() {
     return {
       waveformData: [],
-      tableData: [
-        { date: '2019/11/07 12:05:08', name: '井盖23', type: '水位过高', address: '上海市普陀区金沙江路 1518 弄' },
-        { date: '2019/11/06 02:24:12', name: '井盖34', type: '过度倾斜', address: '上海市普陀区金沙江路 1517 弄' },
-        { date: '2019/11/04 19:02:38', name: '井盖25', type: '电量过低', address: '上海市普陀区金沙江路 1519 弄' },
-        { date: '2019/12/14 09:44:23', name: '井盖25', type: '离线告警', address: '上海市普陀区金沙江路 1511 弄' },
-        { date: '2019/10/01 13:51:52', name: '井盖36', type: '设备溢满', address: '上海市普陀区金沙江路 1516 弄' }
-      ],
+      tableData: [],
       top1: [
         { index: 1, deviceNumber: '井盖1' },
         { index: 2, deviceNumber: '井盖2' },
@@ -96,7 +93,13 @@ export default {
       ],
       warnData: [],
       waterChange: [],
-      doughnutData: {}
+      doughnutData: {},
+      total: {
+        totalDevices: null,
+        onlineDevices: null,
+        warningDevices: null,
+        weather: null
+      }
     };
   },
   created() {
@@ -124,21 +127,32 @@ export default {
         { time: '1/12', value: 68 },
         { time: '1/12', value: 62 }
       ];
-      this.waterChange = [
-        { name: '井08', typeName: '离线', value: 0.7, type: 'offline' },
-        { name: '井09', typeName: '告警', value: 0.5, type: 'warn' },
-        { name: '井10', typeName: '正常', value: 0.92, type: 'normal' },
-        { name: '井11', typeName: '离线', value: 0.85, type: 'offline' },
-        { name: '井12', typeName: '故障', value: 1.1, type: 'fault' }
-      ];
-      this.paly();
+      this.getAlarms();
+      this.getDeviceNumber();
+      this.getWaterLevelList();
     },
-    paly() {
-      setInterval(this.change, 2000);// 每两秒执行一次插入删除操作
+    // 实时水位变化
+    getWaterLevelList() {
+      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 5 }).then(res => {
+        if (res.code === 10000) this.waterChange = res.data;
+      });
     },
-    change() {
-      this.tableData.push(this.tableData[0]);// 把第一条数据插入数组最有一条
-      this.tableData.shift();// 删除数组中第一条数据
+    // 获取设备数量&天气数据
+    getDeviceNumber() {
+      getTotalDevices({}).then(res => {
+        if (res.code === 10000) {
+          this.total = res.data;
+        }
+      });
+    },
+    // 获取告警列表
+    getAlarms() {
+      getAlarmList({ pageIndex: 1, pageSize: 10 }).then(res => {
+        if (res.code === 10000) {
+          this.tableData = res.data;
+          setInterval(() => scrollData('.scroll-content', this.tableData), 4000);
+        }
+      });
     }
   }
 };

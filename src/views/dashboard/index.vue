@@ -5,7 +5,7 @@
     </BoxWrap>
 
     <BoxWrap class="clazz02" title="设备" subtext="告警信息">
-      <el-table class="wrap-table" :data="tableData">
+      <el-table class="wrap-table scroll-content" :data="tableData">
         <el-table-column prop="createTime" label="时间" width="160" />
         <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" width="150" show-overflow-tooltip />
         <el-table-column prop="alarmName" label="告警类型" class-name="cell-warning" width="80" />
@@ -50,6 +50,7 @@ import 'echarts/lib/component/tooltip';
 
 import { dailyAlarm, getAlarm, getTotalDevices, getDeviceModels, getAlarmList, getWaterLevel, waterQuality } from '@/api/dashboard';
 
+import { scrollData } from '@/utils/animation';
 export default {
   name: 'Dashboard',
   components: {
@@ -104,9 +105,10 @@ export default {
   methods: {
     // 获取告警列表
     getAlarms() {
-      getAlarmList({ pageIndex: 1, pageSize: 4 }).then(res => {
+      getAlarmList({ pageIndex: 1, pageSize: 10 }).then(res => {
         if (res.code === 10000) {
           this.tableData = res.data;
+          setInterval(() => scrollData('.scroll-content', this.tableData), 4000);
         }
       });
     },
