@@ -37,7 +37,7 @@ import QtDialog from '@/components/QtDialog';
  */
 import { mockXHR } from '../mock';
 if (process.env.NODE_ENV === 'production') {
-  mockXHR()
+  mockXHR();
 }
 
 // set ElementUI lang to EN
