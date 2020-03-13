@@ -117,6 +117,9 @@ export default {
       this.getNHAandPH();
     }, 60000);
   },
+  destroyed() {
+    this.timer && clearInterval(this.timer);
+  },
   methods: {
     // 设备状况
     getStatusData() {
@@ -190,7 +193,7 @@ export default {
       getAlarmList({ pageIndex: 1, pageSize: 10 }).then(res => {
         if (res.code === 10000) {
           this.tableData = res.data;
-          setInterval(() => scrollData('.scroll-content', this.tableData), 4000);
+          this.timer = setInterval(() => scrollData('.scroll-content', this.tableData), 4000);
         }
       });
     },
