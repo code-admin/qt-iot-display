@@ -199,7 +199,7 @@ export default {
     },
     // 实时水位变化
     getWaterLevelList() {
-      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 5 }).then(res => {
+      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 10 }).then(res => {
         if (res.code === 10000) this.waterChange = res.data;
       });
     }

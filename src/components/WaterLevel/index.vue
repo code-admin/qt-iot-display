@@ -18,9 +18,14 @@ export default {
       default: () => []
     }
   },
+  data() {
+    return {
+      scrollData: []
+    };
+  },
   computed: {
     options() {
-      const data = this.data;
+      const data = this.scrollData;
       const maxValue = Math.max(...data.map(d => d.value || 0));
       const barData = data.map(d => {
         return { ...d, value: Math.ceil(maxValue) };
@@ -82,7 +87,6 @@ export default {
           },
           {
             type: 'bar',
-            barMaxWidth: '100%',
             data: barData.map(bar => {
               return { value: bar.value + '', itemStyle: {
                 color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: colorMap[bar.type] }
@@ -100,8 +104,9 @@ export default {
                   label: {
                     show: true,
                     color: 'white',
-                    fontSize: 14,
-                    formatter: bar.name.substring(0, 5) + '\n' + bar.name.substring(6, 10)
+                    fontSize: 13,
+                    offset: [0, -30],
+                    formatter: bar.name.substring(0, 4) + '\n' + bar.name.substring(5, 10)
                   }
                 };
               })
@@ -111,6 +116,32 @@ export default {
       };
       return options;
     }
+  },
+  watch: {
+    data: {
+      handler: function(data) {
+        let count = 5;
+        const maxCount = data.length - 1;
+        this.scrollData = data.length > 5 ? data.slice(0, 5) : data;
+        if (data.length <= 5) return;
+
+        const scrollData = this.scrollData;
+        this.timer && clearInterval(this.timer);
+        this.timer = setInterval(() => {
+          scrollData.shift();
+          const index = count + 1 > maxCount ? (count = 0) : count++;
+          if (data[index].value == null) {
+            data[index].value = 0;
+          }
+          scrollData.push(data[index]);
+          this.scrollData = scrollData;
+        }, 3500);
+      },
+      immediate: true
+    }
+  },
+  destroyed() {
+    this.timer && clearInterval(this.timer);
   }
 };
 </script>
