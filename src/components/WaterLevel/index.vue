@@ -39,10 +39,10 @@ export default {
       const textColorMap = { offline: 'rgb(255, 255, 255)', warn: 'rgb(255, 243, 104)', normal: 'rgb(0, 255, 170)', fault: 'rgb(255, 127, 102)' };
       const options = {
         grid: {
-          top: '30%',
+          top: '25%',
           left: 30,
           width: '95%',
-          height: '60%'
+          height: '50%'
         },
         tooltip: {
           trigger: 'axis',
@@ -123,7 +123,10 @@ export default {
         let count = 5;
         const maxCount = data.length - 1;
         this.scrollData = data.length > 5 ? data.slice(0, 5) : data;
-        if (data.length <= 5) return;
+        if (data.length <= 5) {
+          this.timer && clearInterval(this.timer);
+          return;
+        }
 
         const scrollData = this.scrollData;
         this.timer && clearInterval(this.timer);

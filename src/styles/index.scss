@@ -107,3 +107,20 @@ div:focus {
 .v-modal {
     opacity: 0.8
 }
+
+.el-select-dropdown.el-popper {
+    border-radius: 2px;
+    border: 1px solid #0276801f;
+    background-color: rgba(20, 20, 20, 0.61);
+    .el-select-dropdown__item {
+        color: rgba(218, 214, 214, 0.9);
+
+        &.hover,&:hover {
+            background-color: #02768038;
+        }
+        &.selected {
+            color: white;
+            background-color: #02768088;
+        }
+    }
+}

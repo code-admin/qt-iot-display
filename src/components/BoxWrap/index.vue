@@ -218,6 +218,22 @@ export default {
     height: 100%;
     padding: 30px 20px 20px;
     overflow: hidden;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    >.el-select {
+      align-self: flex-end;
+
+      /deep/ input{
+        border-radius: 1px;
+        background-color: rgba(255, 255, 255, 0.08);
+        border:1px solid rgba(255, 255, 255, 0.16);
+        font-family:Microsoft YaHei;
+        font-weight:bold;
+        color:rgba(255,255,255,1);
+      }
+    }
   }
 }
 .el-dropdown-menu {
