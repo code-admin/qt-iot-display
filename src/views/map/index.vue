@@ -7,7 +7,6 @@
       :amap-manager="amapManager"
       :events="events"
       :map-style="mapStyle"
-      :pitch="50"
       view-mode="2D"
       :center="mapCenter"
       :zoom="zoom"
@@ -45,6 +44,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import { AMapManager } from 'vue-amap';
 import LiquidFill from '@/components/LiquidFill';
 import TortuousLine from '@/components/TortuousLine';
@@ -72,9 +72,6 @@ export default {
           // o.getCity(result => {
           //   console.log(result);
           // });
-
-          // 设置区域地图
-          this.setMap();
         },
         moveend: () => {},
         zoomchange: () => {},
@@ -84,18 +81,11 @@ export default {
       },
       plugin: ['ToolBar', {
         pName: 'MapType',
-        defaultType: 0,
-        events: {
-          init(o) {
-            console.log(o);
-          }
-        }
+        defaultType: 0
       }],
       // 高德开发平台自定义样式
-      mapStyle: 'amap://styles/f8fa7a6a6b7eb457f6bcdcb91abd0529',
+      mapStyle: 'amap://styles/4a9de36e3db3bd5097a179af47218776',
       markers: [],
-      map: null,
-      componentMap: null,
       deviceName: null
     };
   },
@@ -138,58 +128,19 @@ export default {
     }
   },
   mounted() {
+    this.ipToCenter();
     this.getMarkerList();
   },
   methods: {
-    // 获取地图实例
-    setMap() {
-      const _AMap = window.AMap;
-      const _map = amapManager.getMap();
-      _map.getCity(result => {
-        // console.log('============', result.district);
-        const districtName = result.district;
-        // 行政区查询服务，提供了根据名称关键字、citycode、adcode 来查询行政区信息的功能
-        new _AMap.DistrictSearch({
-          extensions: 'all',
-          subdistrict: 0
-        }).search(districtName, function(status, result) {
-          // 外多边形坐标数组和内多边形坐标数组
-          const outer = [
-            new _AMap.LngLat(-360, 90, true),
-            new _AMap.LngLat(-360, -90, true),
-            new _AMap.LngLat(360, -90, true),
-            new _AMap.LngLat(360, 90, true)
-          ];
-          const holes = result.districtList[0].boundaries;
-          const pathArray = [
-            outer
-          ];
-          pathArray.push.apply(pathArray, holes);
-          const polygon = new _AMap.Polygon({
-            pathL: pathArray,
-            // 线条颜色，使用16进制颜色代码赋值。默认值为#006600
-            strokeColor: 'rgb(20,164,173)',
-            strokeWeight: 2,
-            // 轮廓线透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
-            strokeOpacity: 0.88,
-            // 多边形填充颜色，使用16进制颜色代码赋值，如：#FFAA00
-            fillColor: 'rgba(1,22,42)',
-            // 多边形填充透明度，取值范围[0,1]，0表示完全透明，1表示不透明。默认为0.9
-            fillOpacity: 0.9,
-            // 轮廓线样式，实线:solid，虚线:dashed
-            strokeStyle: 'dashed',
-            /* 勾勒形状轮廓的虚线和间隙的样式，此属性在strokeStyle 为dashed 时有效， 此属性在
-                                                                                                                                                                          ie9+浏览器有效 取值：
-                                                                                                                                                                          实线：[0,0,0]
-                                                                                                                                                                          虚线：[10,10] ，[10,10] 表示10个像素的实线和10个像素的空白（如此反复）组成的虚线
-                                                                                                                                                                          点画线：[10,2,10]， [10,2,10] 表示10个像素的实线和2个像素的空白 + 10个像素的实
-                                                                                                                                                                          线和10个像素的空白 （如此反复）组成的虚线
-                                                                                                                                                                        */
-            strokeDasharray: [10, 2, 10]
-          });
-          polygon.setPath(pathArray);
-          _map.add(polygon);
-        });
+    ipToCenter() {
+      const url = `https://restapi.amap.com/v3/ip?output=json&key=d12759e632b81a0456db8ac83cedeb52`;
+      axios.get(url).then(res => {
+        const a = res.data.rectangle.split(';');
+        const a1 = a[0].split(',');
+        const a2 = a[1].split(',');
+        const lng = (parseFloat(a1[0]) + parseFloat(a2[0])) / 2;
+        const lat = (parseFloat(a1[1]) + parseFloat(a2[1])) / 2;
+        this.mapCenter = [lng, lat];
       });
     },
     getMarkerList: function() {
@@ -198,14 +149,10 @@ export default {
         this.markers = res.data;
         this.isloading = true;
       });
-      // this.markers = [
-      //   { position: [120.452218, 27.525692], deviceType: 1, deviceStatus: 1, label: { content: '井盖 #11', offset: [-30, -25] }}
-      // ];
     },
     handleMarker(marker) {
       this.deviceName = marker.deviceName || '';
       this.dialogVisible = !this.dialogVisible;
-      // console.log(marker);
     }
   }
 };

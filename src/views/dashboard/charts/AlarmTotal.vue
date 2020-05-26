@@ -86,7 +86,7 @@ export default {
         }],
         series: [{ // For shadow
           type: 'bar',
-          barWidth: 25, // 宽度
+          barWidth: 20, // 宽度
           itemStyle: {
             normal: {
               color: 'rgba(255,255,255,0.1)'
@@ -94,12 +94,12 @@ export default {
           },
           barGap: '-100%',
           barCategoryGap: '40%',
-          data: [120, 120, 120, 120, 120, 120, 120],
+          data: [maxValue, maxValue, maxValue, maxValue, maxValue, maxValue, maxValue, maxValue, maxValue, maxValue],
           animation: false
         },
         {
           type: 'bar',
-          barWidth: 25, // 宽度
+          barWidth: 20, // 宽度
           label: {
             normal: {
               show: true,

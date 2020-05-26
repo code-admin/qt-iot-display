@@ -7,3 +7,18 @@ export function dailyAlarm(data) {
     data
   });
 }
+
+export function getWellCoverStatus() {
+  return request({
+    url: `/wellcover/getWellCoverStatus`,
+    method: 'post'
+  });
+}
+
+export function top10AlarmDevice() {
+  return request({
+    url: `/wellcover/top10AlarmDevice`,
+    method: 'post'
+  });
+}
+

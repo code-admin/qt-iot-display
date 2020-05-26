@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <box-wrap class="clazz01" title="井盖" subtext="设备告警">
-      <waveform :data="waveformData" />
+    <box-wrap class="clazz01" title="水质" subtext="参数变化">
+      <waveform v-if="!!waveformData" :data="waveformData" />
     </box-wrap>
     <box-wrap class="clazz02" title="井盖" subtext="设备告警排行">
       <el-row :gutter="20" class="tied">
@@ -14,13 +14,13 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column prop="deviceNumber" label="设备编号" class-name="cell-primary" />
+            <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" show-overflow-tooltip />
           </el-table>
         </el-col>
         <el-col :span="12">
           <el-table class="wrap-table" :data="top2">
             <el-table-column prop="index" label="名次" />
-            <el-table-column prop="deviceNumber" label="设备编号" class-name="cell-primary" />
+            <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" show-overflow-tooltip />
           </el-table>
         </el-col>
       </el-row>
@@ -41,7 +41,7 @@
       </el-table>
     </box-wrap>
     <box-wrap class="clazz06" title="井盖" subtext="智能状态">
-      <doughnut :data="doughnutData" />
+      <doughnut v-if="!!doughnutData" :data="doughnutData" />
     </box-wrap>
 
     <div class="rect-container">
@@ -59,7 +59,8 @@ import AlarmTotal from '../charts/AlarmTotal';
 import Doughnut from '@/components/Doughnut';
 import Waveform from '@/components/Waveform';
 import WaterLevel from '@/components/WaterLevel';
-import { getTotalDevices, getWaterLevel } from '@/api/dashboard';
+import { getTotalDevices, getWaterLevel, waterQuality, dailyAlarm } from '@/api/dashboard';
+import { getWellCoverStatus, top10AlarmDevice } from '@/api/wellcover';
 import { getAlarmList } from '@/api/water';
 
 import { scrollData } from '@/utils/animation';
@@ -75,25 +76,19 @@ export default {
   },
   data() {
     return {
-      waveformData: [],
+      waveformData: {
+        reportTime: [],
+        options: [
+          { name: 'COD氨氮', values: [] },
+          { name: 'PH酸碱度', values: [] }
+        ]
+      },
       tableData: [],
-      top1: [
-        { index: 1, deviceNumber: '井盖1' },
-        { index: 2, deviceNumber: '井盖2' },
-        { index: 3, deviceNumber: '井盖3' },
-        { index: 4, deviceNumber: '井盖4' },
-        { index: 5, deviceNumber: '井盖5' }
-      ],
-      top2: [
-        { index: 6, deviceNumber: '井盖6' },
-        { index: 7, deviceNumber: '井盖7' },
-        { index: 8, deviceNumber: '井盖8' },
-        { index: 9, deviceNumber: '井盖9' },
-        { index: 10, deviceNumber: '井盖10' }
-      ],
+      top1: [],
+      top2: [],
       warnData: [],
       waterChange: [],
-      doughnutData: {},
+      doughnutData: null,
       total: {
         totalDevices: null,
         onlineDevices: null,
@@ -110,30 +105,52 @@ export default {
   },
   methods: {
     initData() {
-      this.waveformData = {
-        reportTime: ['28/11', '29/11', '30/11', '1/12', '2/12', '3/12', '4/12', '5/12', '6/12', '7/12'],
-        options: [
-          { name: 'COD氨氮', values: [180, 165, 189.99, 150.12, 163.32, 169.21, 171.28, 165.78, 181.21, 179.21] },
-          { name: 'PH酸碱度', values: [5, 7, 6.99, 8.55, 11.32, 5.21, 6.28, 7.98, 9.21, 11.21] }
-        ]
-      };
-      this.doughnutData = [
-        { name: '正常', value: 36 }, { name: '未激活', value: 36 }, { name: '信号告警', value: 28 }, { name: '电量告警', value: 36 }, { name: '亮度告警', value: 36 },
-        { name: '倾斜', value: 28 }, { name: '水位告警', value: 36 }, { name: '离线', value: 36 }, { name: '溢满', value: 28 }, { name: '烟雾告警', value: 36 }
-      ];
-      this.warnData = [
-        { time: '1/12', value: 45 },
-        { time: '1/12', value: 79 },
-        { time: '1/12', value: 95 },
-        { time: '1/12', value: 39 },
-        { time: '1/12', value: 58 },
-        { time: '1/12', value: 68 },
-        { time: '1/12', value: 62 }
-      ];
-      this.getAlarms();
-      this.getDeviceNumber();
-      this.getWaterLevelList();
+      this.getWaterPros(); // 水质参数
+      this.getTop10(); //  图二, 告警排行
+      this.getDailyAlarm(0); // 图三，井盖告警总理数
+      this.getWaterLevelList();// 图四 水位变化
+      this.getAlarms(); // 图5 告警列表
+      this.getWellCoverWarningStatus(); // 图六 井盖状态
+      this.getDeviceNumber(); // 底部数据
     },
+
+    // 获取告警排行
+    getTop10() {
+      var temp1 = [];
+      var temp2 = [];
+      top10AlarmDevice().then(res => {
+        res.data.map((obj, index) => {
+          if (index < 5) {
+            temp1.push({
+              index: index + 1,
+              ...obj
+            });
+          }
+          if (index > 4) {
+            temp2.push({
+              index: index + 1,
+              ...obj
+            });
+          }
+        });
+      });
+      this.top1 = temp1;
+      this.top2 = temp2;
+    },
+
+    // 设备告警趋势
+    getDailyAlarm(i) {
+      const tempArr = [];
+      dailyAlarm(i).then(res => {
+        res.data && res.data.map(obj => {
+          tempArr.push({
+            time: obj.reportTime, value: obj.alarmNumber
+          });
+        });
+        this.warnData = tempArr;
+      });
+    },
+
     // 实时水位变化
     getWaterLevelList() {
       getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 10 }).then(res => {
@@ -155,6 +172,26 @@ export default {
           this.tableData = res.data;
           this.timer = setInterval(() => scrollData('.scroll-content', this.tableData), 4000);
         }
+      });
+    },
+    // 获取水质参数
+    getWaterPros() {
+      waterQuality().then(res => {
+        if (res.code === 10000) {
+          this.waveformData = {
+            reportTime: res.data.times,
+            options: [
+              { name: 'COD氨氮', values: res.data.cod },
+              { name: 'PH酸碱度', values: res.data.ph }
+            ]
+          };
+        }
+      });
+    },
+    getWellCoverWarningStatus() {
+      getWellCoverStatus().then(res => {
+        const result = res.data;
+        this.doughnutData = [{ name: '正常', value: result.normal }, { name: '未激活', value: result.inactive }, { name: '信号告警', value: result.signal }, { name: '电量告警', value: result.lowBattery }, { name: '亮度告警', value: result.brightness }, { name: '倾斜', value: result.isTit }, { name: '水位告警', value: result.waterLevel }, { name: '离线', value: result.offline }, { name: '溢满', value: result.overflow }, { name: '烟雾告警', value: result.smoke }];
       });
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <BoxWrap class="clazz01" subtext="设备告警" :select-list="['常规井','雨水井','污水井']" :change="callChange">
+    <BoxWrap class="clazz01" subtext="设备告警" :select-list="['常规井','雨水井','污水井']" :change="getAlarmByDeviceModel">
       <RadarPart v-if="!!radarData" :data="radarData" />
     </BoxWrap>
 
@@ -17,7 +17,7 @@
       <Doughnut :data="doughnutData" indicator />
     </BoxWrap>
 
-    <BoxWrap class="clazz04" :select-list="['常规井','雨水井','污水井']" subtext="日告警趋势">
+    <BoxWrap class="clazz04" :select-list="['常规井','雨水井','污水井']" :change="getDailyAlarm" subtext="日告警趋势">
       <AlarmTrend :data="alarmTrend" />
     </BoxWrap>
 
@@ -30,9 +30,9 @@
     </BoxWrap>
 
     <div class="rect-container">
-      <RectWrap title="设备总数" :value="total.totalDevices || 0" color="#66B3FF" :total="total.totalDevices" />
-      <RectWrap title="在线设备数" :value="total.onlineDevices || 0" :total="total.totalDevices" />
-      <RectWrap title="告警设备数" :value="total.warningDevices || 0" color="#FFBF7F" :total="total.totalDevices" />
+      <RectWrap title="设备总数" :value="totals.totalDevices || 0" color="#66B3FF" :total="totals.totalDevices" />
+      <RectWrap title="在线设备数" :value="totals.onlineDevices || 0" :total="totals.totalDevices" />
+      <RectWrap title="告警设备数" :value="totals.warningDevices || 0" color="#FFBF7F" :total="totals.totalDevices" />
     </div>
   </div>
 </template>
@@ -64,12 +64,11 @@ export default {
   },
   data() {
     return {
-      radarMaxVal: 20,
       radarData: null,
       doughnutData: [],
       waterChange: [],
       tableData: [],
-      total: {
+      totals: {
         totalDevices: null,
         onlineDevices: null,
         warningDevices: null,
@@ -94,13 +93,13 @@ export default {
     };
   },
   mounted() {
-    this.getDeviceNumber();
-    this.getAlarmByDeviceModel(1);
-    this.getAlarms();
-    this.getDeviceType();
-    this.getDailyAlarm();
-    this.getWaterLevelList();
-    this.getWaterPros();
+    this.getDeviceNumber(); // 底部中央各数据
+    this.getAlarmByDeviceModel(0); // 图一 雷达图数据
+    this.getAlarms(); // 图二 告警列表
+    this.getDeviceType(); // 图三 设备类型占比
+    this.getDailyAlarm(0); // 图四 日告警趋势
+    this.getWaterLevelList(); // 图五 水位
+    this.getWaterPros(); // 图六 水质参数
   },
   destroyed() {
     this.timer && clearInterval(this.timer);
@@ -119,28 +118,24 @@ export default {
     getAlarmByDeviceModel(model) {
       getAlarm(model).then(res => {
         this.radarData = [
-          { name: '水位高度', max: this.radarMaxVal, label: '水位告警比例', value: res.data.waterLevel, unit: '%' },
-          { name: '电量', max: this.radarMaxVal, label: '倾斜告警比例', value: res.data.isTit, unit: '%' },
-          { name: '溢满', max: this.radarMaxVal, label: '溢满告警比例', value: res.data.overflow, unit: '%' },
-          { name: '设备倾斜', max: this.radarMaxVal, label: '电量低告警比例', value: res.data.lowBattery, unit: '%' },
-          { name: '设备离线', max: this.radarMaxVal, label: '设备离线比例', value: res.data.offline, unit: '%' }
+          { name: '水位高度', max: res.data.total, label: '水位告警比例', value: res.data.waterLevel, unit: '%' },
+          { name: '电量', max: res.data.total, label: '倾斜告警比例', value: res.data.isTit, unit: '%' },
+          { name: '溢满', max: res.data.total, label: '溢满告警比例', value: res.data.overflow, unit: '%' },
+          { name: '设备倾斜', max: res.data.total, label: '电量低告警比例', value: res.data.lowBattery, unit: '%' },
+          { name: '设备离线', max: res.data.total, label: '设备离线比例', value: res.data.offline, unit: '%' }
         ];
       });
     },
-    // 获取设备数量&天气数据
+    // 获取设备总数、在线数、告警数、以及天气参数
     getDeviceNumber() {
       getTotalDevices({}).then(res => {
-        if (res.code === 10000) {
-          this.total = res.data;
-        }
+        this.totals = res.data;
       });
     },
     // 设备告警趋势
-    getDailyAlarm() {
-      dailyAlarm(1).then(res => {
-        if (res.code === 10000) {
-          this.alarmTrend = res.data;
-        }
+    getDailyAlarm(i) {
+      dailyAlarm(i).then(res => {
+        this.alarmTrend = res.data;
       });
     },
 
@@ -173,13 +168,6 @@ export default {
           };
         }
       });
-    },
-
-    callChange(e) {
-      const data = this.radarData.map(d => {
-        return Object.assign(d, { value: Math.random() * 100 });
-      });
-      this.radarData = data;
     }
   }
 };
