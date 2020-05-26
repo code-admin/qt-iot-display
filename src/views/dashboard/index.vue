@@ -22,6 +22,9 @@
     </BoxWrap>
 
     <BoxWrap class="clazz05" title="实时" subtext="水位变化">
+      <el-select v-model="projectId" class="project-select" size="mini" placeholder="请选择" @change="selectProject">
+        <el-option v-for="project in projectList" :key="project.id" :label="project.projectName" :value="project.id" />
+      </el-select>
       <WaterLevel :data="waterChange" />
     </BoxWrap>
 
@@ -49,8 +52,10 @@ import RectWrap from '@/components/RectWrap';
 import 'echarts/lib/component/tooltip';
 
 import { dailyAlarm, getAlarm, getTotalDevices, getDeviceModels, getAlarmList, getWaterLevel, waterQuality } from '@/api/dashboard';
+import { getProjectList } from '@/api/common';
 
 import { scrollData } from '@/utils/animation';
+
 export default {
   name: 'Dashboard',
   components: {
@@ -73,7 +78,9 @@ export default {
         onlineDevices: null,
         warningDevices: null,
         weather: null
-      }
+      },
+      projectId: null,
+      projectList: []
     };
   },
   computed: {
@@ -100,6 +107,8 @@ export default {
     this.getDailyAlarm(0); // 图四 日告警趋势
     this.getWaterLevelList(); // 图五 水位
     this.getWaterPros(); // 图六 水质参数
+
+    this.getProjects();
   },
   destroyed() {
     this.timer && clearInterval(this.timer);
@@ -168,6 +177,18 @@ export default {
           };
         }
       });
+    },
+
+    // 获取项目
+    getProjects() {
+      getProjectList().then(res => {
+        this.projectList = res.data;
+      });
+    },
+    selectProject(projectId) {
+      getWaterLevel({ projectId: projectId, pageIndex: 1, pageSize: 10 }).then(res => {
+        this.waterChange = res.data;
+      });
     }
   }
 };
@@ -206,6 +227,9 @@ export default {
 .clazz05 {
   top: 750px;
   left: 10px;
+  .project-select{
+    width: 200px;
+  }
 }
 
 .clazz06 {
