@@ -21,6 +21,9 @@
       </el-table>
     </box-wrap>
     <box-wrap class="clazz06" title="实时" subtext="水位变化">
+      <el-select v-model="projectId" class="project-select" size="mini" placeholder="请选择" @change="getWaterLevelList">
+        <el-option v-for="project in projectList" :key="project.id" :label="project.projectName" :value="project.id" />
+      </el-select>
       <WaterLevel :data="waterChange" />
     </box-wrap>
 
@@ -43,6 +46,7 @@ import WaterLevel from '@/components/WaterLevel';
 
 import { getTotalDevices, getWaterLevel } from '@/api/dashboard';
 import { getAlarmChange, getAlarmList, getPHList, getCodList, getAlarmPercentage } from '@/api/water';
+import { getProjectList } from '@/api/common';
 
 import { scrollData } from '@/utils/animation';
 export default {
@@ -92,7 +96,9 @@ export default {
         onlineDevices: null,
         warningDevices: null,
         weather: null
-      }
+      },
+      projectId: null,
+      projectList: []
     };
   },
   created() {
@@ -112,6 +118,7 @@ export default {
     this.getWaterLevelList();
     this.getCodData();
     this.getNHAandPH();
+    this.getProjects();
     setInterval(() => {
       this.getCodData();
       this.getNHAandPH();
@@ -198,9 +205,15 @@ export default {
       });
     },
     // 实时水位变化
-    getWaterLevelList() {
-      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 10 }).then(res => {
+    getWaterLevelList(projectId) {
+      getWaterLevel({ projectId: projectId }).then(res => {
         if (res.code === 10000) this.waterChange = res.data;
+      });
+    },
+    // 获取项目
+    getProjects() {
+      getProjectList().then(res => {
+        this.projectList = res.data;
       });
     }
   }

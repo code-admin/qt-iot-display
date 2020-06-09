@@ -4,7 +4,7 @@ import Router from 'vue-router';
 Vue.use(Router);
 
 /* Layout */
-// import Layout from '@/layout';
+import Layout from '@/layout';
 import DisplayLayout from '@/layout-display';
 
 /**
@@ -73,35 +73,34 @@ export const constantRoutes = [{
   }]
 },
 
-// {
-//   path: '/example',
-//   component: Layout,
-//   redirect: '/example/table',
-//   name: 'Example',
-//   meta: { title: 'Example', icon: 'example' },
-//   children: [{
-//     path: 'map',
-//     name: 'Map',
-//     component: () =>
-//                     import('@/views/map/index'),
-//     meta: { title: '地图', icon: 'map' }
-//   }, {
-//     path: 'echarts',
-//     name: 'Echarts',
-//     component: () => import('@/views/echarts/index'),
-//     meta: { title: '图表', icon: 'echarts' }
-//   }, {
-//     path: 'table',
-//     name: 'Table',
-//     component: () => import('@/views/test/index'),
-//     meta: { title: 'Table', icon: 'table' }
-//   }, {
-//     path: 'tree',
-//     name: 'Tree',
-//     component: () => import('@/views/test/index'),
-//     meta: { title: 'Tree', icon: 'tree' }
-//   }]
-// },
+{
+  path: '/example',
+  component: Layout,
+  redirect: '/example/table',
+  name: 'Example',
+  meta: { title: 'Example', icon: 'example' },
+  children: [{
+    path: 'map',
+    name: 'Map',
+    component: () => import('@/views/map/index'),
+    meta: { title: '地图', icon: 'map' }
+  }, {
+    path: 'echarts',
+    name: 'Echarts',
+    component: () => import('@/views/echarts/index'),
+    meta: { title: '图表', icon: 'echarts' }
+  }, {
+    path: 'table',
+    name: 'Table',
+    component: () => import('@/views/test/index'),
+    meta: { title: 'Table', icon: 'table' }
+  }, {
+    path: 'tree',
+    name: 'Tree',
+    component: () => import('@/views/test/index'),
+    meta: { title: 'Tree', icon: 'tree' }
+  }]
+},
 
 // 404 page must be placed at the end !!!
 { path: '*', redirect: '/404', hidden: true }

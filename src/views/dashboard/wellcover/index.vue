@@ -30,6 +30,9 @@
       <alarm-total :data="warnData" />
     </box-wrap>
     <box-wrap class="clazz04" title="井盖" subtext="实时水位变化">
+      <el-select v-model="projectId" class="project-select" size="mini" placeholder="请选择" @change="getWaterLevelList">
+        <el-option v-for="project in projectList" :key="project.id" :label="project.projectName" :value="project.id" />
+      </el-select>
       <water-level :data="waterChange" />
     </box-wrap>
     <box-wrap class="clazz05" title="井盖" subtext="告警信息">
@@ -62,6 +65,7 @@ import WaterLevel from '@/components/WaterLevel';
 import { getTotalDevices, getWaterLevel, waterQuality, dailyAlarm } from '@/api/dashboard';
 import { getWellCoverStatus, top10AlarmDevice } from '@/api/wellcover';
 import { getAlarmList } from '@/api/water';
+import { getProjectList } from '@/api/common';
 
 import { scrollData } from '@/utils/animation';
 export default {
@@ -94,7 +98,9 @@ export default {
         onlineDevices: null,
         warningDevices: null,
         weather: null
-      }
+      },
+      projectId: null,
+      projectList: []
     };
   },
   created() {
@@ -112,6 +118,8 @@ export default {
       this.getAlarms(); // 图5 告警列表
       this.getWellCoverWarningStatus(); // 图六 井盖状态
       this.getDeviceNumber(); // 底部数据
+
+      this.getProjects();
     },
 
     // 获取告警排行
@@ -152,8 +160,8 @@ export default {
     },
 
     // 实时水位变化
-    getWaterLevelList() {
-      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 10 }).then(res => {
+    getWaterLevelList(projectId) {
+      getWaterLevel({ projectId: projectId }).then(res => {
         if (res.code === 10000) this.waterChange = res.data;
       });
     },
@@ -192,6 +200,12 @@ export default {
       getWellCoverStatus().then(res => {
         const result = res.data;
         this.doughnutData = [{ name: '正常', value: result.normal }, { name: '未激活', value: result.inactive }, { name: '信号告警', value: result.signal }, { name: '电量告警', value: result.lowBattery }, { name: '亮度告警', value: result.brightness }, { name: '倾斜', value: result.isTit }, { name: '水位告警', value: result.waterLevel }, { name: '离线', value: result.offline }, { name: '溢满', value: result.overflow }, { name: '烟雾告警', value: result.smoke }];
+      });
+    },
+    // 获取项目
+    getProjects() {
+      getProjectList().then(res => {
+        this.projectList = res.data;
       });
     }
   }

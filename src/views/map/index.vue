@@ -24,8 +24,24 @@
       />
     </el-amap>
 
-    <!-- 窗口信息 -->
-    <qt-dialog :visible.sync="dialogVisible" :highlight-title="deviceName" title="水质参数信息">
+    <!-- 常规井窗口信息 -->
+    <qt-dialog :visible.sync="dialogVisible1" :highlight-title="deviceName" title="井下参数信息">
+      <div class="box-warp">
+        <div class="liquid-container">
+          <LiquidFill title="信号强度" value="21" :percent="0.65" unit="dBm" />
+          <LiquidFill title="电池电量" value="3.5" :percent="3.5/3.6" unit="V" color="rgba(120, 255, 100, 0.3)" />
+          <LiquidFill title="光亮值" value="正常" :percent="0.11" color="rgba(255, 255, 255, 0.3)" />
+          <LiquidFill title="倾斜角" value="< 6º" :percent="0.17" />
+          <LiquidFill title="烟雾浓度" value="正常" :percent="0.12" color="rgba(255, 255, 255, 0.3)" />
+        </div>
+        <div class="tortuous-container">
+          <RoutineWell :data="{}" />
+        </div>
+      </div>
+    </qt-dialog>
+
+    <!-- 雨污井窗口信息 -->
+    <qt-dialog :visible.sync="dialogVisible2" :highlight-title="deviceName" title="水质参数信息">
       <div class="box-warp">
         <div class="liquid-container">
           <LiquidFill title="温度" value="28.7℃" :percent="0.65" color="rgba(120, 255, 100, 0.3)" />
@@ -47,6 +63,7 @@
 import axios from 'axios';
 import { AMapManager } from 'vue-amap';
 import LiquidFill from '@/components/LiquidFill';
+import RoutineWell from '@/components/RoutineWell';
 import TortuousLine from '@/components/TortuousLine';
 
 import { getDeviceMap } from '@/api/dashboard';
@@ -55,12 +72,14 @@ const amapManager = new AMapManager();
 export default {
   components: {
     LiquidFill,
+    RoutineWell,
     TortuousLine
   },
   data() {
     return {
       isloading: false,
-      dialogVisible: false,
+      dialogVisible1: false,
+      dialogVisible2: false,
       amapManager,
       // 可以根据项目 经纬度来设置地图中心点
       mapCenter: [120.500439, 27.366849],
@@ -86,6 +105,7 @@ export default {
       // 高德开发平台自定义样式
       mapStyle: 'amap://styles/4a9de36e3db3bd5097a179af47218776',
       markers: [],
+      deviceModel: 0,
       deviceName: null
     };
   },
@@ -152,7 +172,13 @@ export default {
     },
     handleMarker(marker) {
       this.deviceName = marker.deviceName || '';
-      this.dialogVisible = !this.dialogVisible;
+      if (marker.deviceModel === 1) {
+        this.dialogVisible1 = true;
+      } else if (marker.deviceModel === 2) {
+        this.dialogVisible2 = true;
+      } else if (marker.deviceModel === 3) {
+        this.dialogVisible2 = true;
+      }
     }
   }
 };

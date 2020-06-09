@@ -82,7 +82,7 @@ export default {
             symbolSize: 0.01,
             showSymbol: true,
             smoothMonotone: 'x',
-            label: { show: true, formatter: '{c}m', color: '#ffffff' },
+            label: { show: true, formatter: '{c}cm', color: '#ffffff' },
             itemStyle: { color: '#00FFFF' }
           },
           {

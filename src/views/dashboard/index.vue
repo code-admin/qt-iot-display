@@ -22,7 +22,7 @@
     </BoxWrap>
 
     <BoxWrap class="clazz05" title="实时" subtext="水位变化">
-      <el-select v-model="projectId" class="project-select" size="mini" placeholder="请选择" @change="selectProject">
+      <el-select v-model="projectId" class="project-select" size="mini" placeholder="请选择" @change="getWaterLevelList">
         <el-option v-for="project in projectList" :key="project.id" :label="project.projectName" :value="project.id" />
       </el-select>
       <WaterLevel :data="waterChange" />
@@ -159,9 +159,9 @@ export default {
       });
     },
     // 实时水位变化
-    getWaterLevelList() {
-      getWaterLevel({ projectId: null, pageIndex: 1, pageSize: 10 }).then(res => {
-        if (res.code === 10000) this.waterChange = res.data;
+    getWaterLevelList(projectId) {
+      getWaterLevel({ projectId: projectId }).then(res => {
+        this.waterChange = res.data;
       });
     },
     // 获取水质参数
@@ -183,11 +183,6 @@ export default {
     getProjects() {
       getProjectList().then(res => {
         this.projectList = res.data;
-      });
-    },
-    selectProject(projectId) {
-      getWaterLevel({ projectId: projectId, pageIndex: 1, pageSize: 10 }).then(res => {
-        this.waterChange = res.data;
       });
     }
   }
