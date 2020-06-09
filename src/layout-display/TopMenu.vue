@@ -10,11 +10,11 @@
     <div class="navigate">
       <div>
         <router-link to="/welcome">磁贴管理</router-link>
-        <router-link to="/dashboard">综合概况</router-link>
+        <!-- <router-link to="/dashboard">综合概况</router-link> -->
       </div>
       <div>
         <router-link to="/dashboard/wellcover">井盖设备</router-link>
-        <router-link to="/dashboard/water">雨污监测</router-link>
+        <!-- <router-link to="/dashboard/water">雨污监测</router-link> -->
       </div>
     </div>
   </div>
