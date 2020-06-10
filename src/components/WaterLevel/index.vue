@@ -106,7 +106,7 @@ export default {
                     color: 'white',
                     fontSize: 13,
                     offset: [0, -30],
-                    formatter: bar.name.substring(0, 4) + '\n' + bar.name.substring(5, 10)
+                    formatter: bar.name.substring(0, 5) + '\n' + bar.name.substring(5, 10)
                   }
                 };
               })
