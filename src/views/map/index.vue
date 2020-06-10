@@ -28,14 +28,14 @@
     <qt-dialog :visible.sync="dialogVisible1" :highlight-title="deviceName" title="井下参数信息">
       <div class="box-warp">
         <div class="liquid-container">
-          <LiquidFill title="信号强度" value="21" :percent="0.65" unit="dBm" />
-          <LiquidFill title="电池电量" value="3.5" :percent="3.5/3.6" unit="V" color="rgba(120, 255, 100, 0.3)" />
-          <LiquidFill title="光亮值" value="正常" :percent="0.11" color="rgba(255, 255, 255, 0.3)" />
-          <LiquidFill title="倾斜角" value="< 6º" :percent="0.17" />
-          <LiquidFill title="烟雾浓度" value="正常" :percent="0.12" color="rgba(255, 255, 255, 0.3)" />
+          <LiquidFill title="信号强度" :value="getStatusName(deviceLogsParams.signalStrength)" :percent="deviceLogsParams.signalStrength/31" :unit="`CSQ:${deviceLogsParams.signalStrength}`" />
+          <LiquidFill title="电池电量" :value="`${(deviceLogsParams.battery/100).toFixed(2)} V`" :percent="1-(deviceLogsParams.powerConsumption/13000)" :unit=" `${(100-((deviceLogsParams.powerConsumption/13000)*100)).toFixed(2)} %`" color="rgba(120, 255, 100, 0.3)" />
+          <LiquidFill title="光亮值" :value="deviceLogsParams.brightness === '0' ? '正常':'告警'" :percent="deviceLogsParams.brightness === '0' ? 0.1 : 0.8" color="rgba(255, 255, 255, 0.3)" />
+          <LiquidFill title="倾斜角" :value="`< ${deviceLogsParams.isTilt}º`" :percent="deviceLogsParams.isTilt/90" />
+          <LiquidFill title="烟雾浓度" :value="deviceLogsParams.smokeWarning === '0' ? '正常':'告警'" :percent="deviceLogsParams.smokeWarning === '0' ? 0.05 : 0.75" color="rgba(255, 255, 255, 0.3)" />
         </div>
         <div class="tortuous-container">
-          <RoutineWell :data="{}" />
+          <RoutineWell :data="RoutineWellData" />
         </div>
       </div>
     </qt-dialog>
@@ -67,6 +67,7 @@ import RoutineWell from '@/components/RoutineWell';
 import TortuousLine from '@/components/TortuousLine';
 
 import { getDeviceMap } from '@/api/dashboard';
+import { getDeviceInfosById } from '@/api/wellcover';
 
 const amapManager = new AMapManager();
 export default {
@@ -86,11 +87,7 @@ export default {
       zoom: 11,
       events: {
         init: o => {
-          // console.log(o.getCenter());
-          // console.log('???????????', this.$refs.map.$getInstance());
-          // o.getCity(result => {
-          //   console.log(result);
-          // });
+
         },
         moveend: () => {},
         zoomchange: () => {},
@@ -106,7 +103,13 @@ export default {
       mapStyle: 'amap://styles/4a9de36e3db3bd5097a179af47218776',
       markers: [],
       deviceModel: 0,
-      deviceName: null
+      deviceName: null,
+      deviceLogsParams: {},
+      RoutineWellData: {
+        updateTime: [],
+        waterLevel: [],
+        enTemperature: []
+      }
     };
   },
   computed: {
@@ -145,6 +148,19 @@ export default {
         }
         return `<img src='${require('../../assets/jg_white.png')}' style='width:40px;height:40px;'></img>`;
       };
+    },
+    getStatusName() {
+      return function(val) {
+        if (val >= 20 && val <= 31) {
+          return '较强';
+        } else if (val >= 11 && val <= 19) {
+          return '正常';
+        } else if (val >= 1 && val <= 10) {
+          return '较弱';
+        } else {
+          return '无信号';
+        }
+      };
     }
   },
   mounted() {
@@ -173,12 +189,41 @@ export default {
     handleMarker(marker) {
       this.deviceName = marker.deviceName || '';
       if (marker.deviceModel === 1) {
-        this.dialogVisible1 = true;
+        this.getDeviceInfosLogById(marker.id).then(res => {
+          const tempArr1 = [];
+          const tempArr2 = [];
+          const tempArr3 = [];
+          res.data.map((item, index) => {
+            if (index === 0) {
+              this.deviceLogsParams = {
+                signalStrength: item.signalStrength,
+                battery: item.battery,
+                brightness: item.brightness,
+                powerConsumption: item.powerConsumption,
+                isTilt: item.isTilt,
+                smokeWarning: item.smokeWarning
+              };
+            }
+            tempArr1.push(item.updateTime);
+            tempArr2.push(item.waterLevel);
+            tempArr3.push(item.enTemperature);
+          });
+          this.RoutineWellData = {
+            updateTime: tempArr1,
+            waterLevel: tempArr2,
+            enTemperature: tempArr3
+          };
+          this.dialogVisible1 = true;
+        });
       } else if (marker.deviceModel === 2) {
         this.dialogVisible2 = true;
       } else if (marker.deviceModel === 3) {
         this.dialogVisible2 = true;
       }
+    },
+
+    async getDeviceInfosLogById(deviceId) {
+      return await getDeviceInfosById(deviceId);
     }
   }
 };

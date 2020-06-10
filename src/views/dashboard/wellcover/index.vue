@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-container">
-    <box-wrap class="clazz01" title="水质" subtext="参数变化">
-      <waveform v-if="!!waveformData" :data="waveformData" />
+    <box-wrap class="clazz01" title="井盖" subtext="状态分析">
+      <RadarPart v-if="!!radarData" :data="radarData" />
     </box-wrap>
     <box-wrap class="clazz02" title="井盖" subtext="设备告警排行">
       <el-row :gutter="20" class="tied">
@@ -60,9 +60,9 @@ import BoxWrap from '@/components/BoxWrap';
 import RectWrap from '@/components/RectWrap';
 import AlarmTotal from '../charts/AlarmTotal';
 import Doughnut from '@/components/Doughnut';
-import Waveform from '@/components/Waveform';
+import RadarPart from '@/components/RadarPart';
 import WaterLevel from '@/components/WaterLevel';
-import { getTotalDevices, getWaterLevel, waterQuality, dailyAlarm } from '@/api/dashboard';
+import { getTotalDevices, getWaterLevel, getAlarm, dailyAlarm } from '@/api/dashboard';
 import { getWellCoverStatus, top10AlarmDevice } from '@/api/wellcover';
 import { getAlarmList } from '@/api/water';
 import { getProjectList } from '@/api/common';
@@ -71,15 +71,16 @@ import { scrollData } from '@/utils/animation';
 export default {
   name: 'Wellcover',
   components: {
+    RadarPart,
     BoxWrap,
     RectWrap,
     AlarmTotal,
     WaterLevel,
-    Waveform,
     Doughnut
   },
   data() {
     return {
+      radarData: null,
       waveformData: {
         reportTime: [],
         options: [
@@ -111,7 +112,7 @@ export default {
   },
   methods: {
     initData() {
-      this.getWaterPros(); // 水质参数
+      this.getAlarmByDeviceModel(0); // 雷达图数据
       this.getTop10(); //  图二, 告警排行
       this.getDailyAlarm(0); // 图三，井盖告警总理数
       this.getWaterLevelList();// 图四 水位变化
@@ -120,6 +121,19 @@ export default {
       this.getDeviceNumber(); // 底部数据
 
       this.getProjects();
+    },
+
+    // 雷达图数据
+    getAlarmByDeviceModel(model) {
+      getAlarm(model).then(res => {
+        this.radarData = [
+          { name: '水位高度', max: res.data.total, label: '水位告警比例', value: res.data.waterLevel, unit: '%' },
+          { name: '电量', max: res.data.total, label: '倾斜告警比例', value: res.data.isTit, unit: '%' },
+          { name: '溢满', max: res.data.total, label: '溢满告警比例', value: res.data.overflow, unit: '%' },
+          { name: '设备倾斜', max: res.data.total, label: '电量低告警比例', value: res.data.lowBattery, unit: '%' },
+          { name: '设备离线', max: res.data.total, label: '设备离线比例', value: res.data.offline, unit: '%' }
+        ];
+      });
     },
 
     // 获取告警排行
@@ -182,20 +196,7 @@ export default {
         }
       });
     },
-    // 获取水质参数
-    getWaterPros() {
-      waterQuality().then(res => {
-        if (res.code === 10000) {
-          this.waveformData = {
-            reportTime: res.data.times,
-            options: [
-              { name: 'COD氨氮', values: res.data.cod },
-              { name: 'PH酸碱度', values: res.data.ph }
-            ]
-          };
-        }
-      });
-    },
+
     getWellCoverWarningStatus() {
       getWellCoverStatus().then(res => {
         const result = res.data;

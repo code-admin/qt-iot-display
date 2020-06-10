@@ -22,3 +22,11 @@ export function top10AlarmDevice() {
   });
 }
 
+// 近10次上报数据
+export function getDeviceInfosById(deviceId) {
+  return request({
+    url: `/wellcover/getDeviceInfosById/${deviceId}`,
+    method: 'post'
+  });
+}
+

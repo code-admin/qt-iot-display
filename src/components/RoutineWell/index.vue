@@ -16,7 +16,8 @@ export default {
     data: {
       type: Object,
       required: true,
-      default: () => {}
+      default: () => {
+      }
     }
   },
   computed: {
@@ -70,14 +71,12 @@ export default {
               fontSize: 13
             }
           },
-          data: ['2019-11-23 08:31:50', '2019-11-24 08:31:50', '2019-11-25 08:31:50', '2019-11-26 08:31:50', '2019-11-27 08:31:50',
-            '2019-11-28 08:31:50', '2019-11-29 08:31:50', '2019-11-30 08:31:50', '2019-12-01 08:31:50', '2019-12-02 08:31:50'
-          ]
+          data: this.data.updateTime
         }],
         yAxis: [{
           type: 'value',
           name: '温度',
-          max: 80,
+          // max: 80,
           splitNumber: 8,
           nameTextStyle: {
             color: '#FFFF00'
@@ -105,8 +104,8 @@ export default {
         {
           type: 'value',
           name: '水位',
-          min: 100,
-          max: 300,
+          // min: 100,
+          // max: 300,
           splitNumber: 8,
           nameTextStyle: {
             color: '#00FFAA'
@@ -135,10 +134,14 @@ export default {
           name: '温度',
           yAxisIndex: 0,
           type: 'line',
+          label: {
+            show: true,
+            formatter: '{@score}℃'
+          },
           itemStyle: {
             color: '#FFFF00'
           },
-          data: [22, 35, 19, 27, 30, 33, 31, 29, 26, 28]
+          data: this.data.enTemperature
         },
         {
           name: '水位',
@@ -146,10 +149,14 @@ export default {
           type: 'line',
           smooth: true,
           symbol: 'circle',
+          label: {
+            show: true,
+            formatter: '{@score}cm'
+          },
           itemStyle: {
             color: '#00FFAA'
           },
-          data: [270, 260, 280, 250, 270, 290, 260, 280, 290, 270],
+          data: this.data.waterLevel,
           areaStyle: {
             color: {
               type: 'linear',
