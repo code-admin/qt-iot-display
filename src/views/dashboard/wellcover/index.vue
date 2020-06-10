@@ -14,12 +14,14 @@
                 </div>
               </template>
             </el-table-column>
+            <el-table-column prop="alarmNumber" label="总次数" />
             <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" show-overflow-tooltip />
           </el-table>
         </el-col>
         <el-col :span="12">
           <el-table class="wrap-table" :data="top2">
             <el-table-column prop="index" label="名次" />
+            <el-table-column prop="alarmNumber" label="总次数" />
             <el-table-column prop="deviceName" label="设备名称" class-name="cell-primary" show-overflow-tooltip />
           </el-table>
         </el-col>
