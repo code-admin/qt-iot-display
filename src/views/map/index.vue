@@ -29,7 +29,8 @@
       <div class="box-warp">
         <div class="liquid-container">
           <LiquidFill title="信号强度" :value="getStatusName(deviceLogsParams.signalStrength)" :percent="deviceLogsParams.signalStrength/31" :unit="`CSQ:${deviceLogsParams.signalStrength ? deviceLogsParams.signalStrength: '--'}`" />
-          <LiquidFill title="电池电量" :value="`${deviceLogsParams.battery ? (deviceLogsParams.battery/100).toFixed(2) : '--'} V`" :percent="1-(deviceLogsParams.powerConsumption/13000)" :unit=" `${deviceLogsParams.powerConsumption ? (100-((deviceLogsParams.powerConsumption/13000)*100)).toFixed(2): '--'} %`" color="rgba(120, 255, 100, 0.3)" />
+          <LiquidFill title="电池电量" :value="`${deviceLogsParams.battery ? (deviceLogsParams.battery/100).toFixed(2) : '--'} V`" :percent="0.78" color="rgba(120, 255, 100, 0.3)" />
+          <!-- <LiquidFill title="电池电量" :value="`${deviceLogsParams.battery ? (deviceLogsParams.battery/100).toFixed(2) : '--'} V`" :percent="1-(deviceLogsParams.powerConsumption/13000)" :unit=" `${deviceLogsParams.powerConsumption ? (100-((deviceLogsParams.powerConsumption/13000)*100)).toFixed(2): '--'} %`" color="rgba(120, 255, 100, 0.3)" /> -->
           <LiquidFill title="光亮值" :value="deviceLogsParams.brightness === '0' ? '正常':'告警'" :percent="deviceLogsParams.brightness === '0' ? 0.1 : 0.8" color="rgba(255, 255, 255, 0.3)" />
           <LiquidFill title="倾斜角" :value="`< ${deviceLogsParams.isTilt ? deviceLogsParams.isTilt : '--'}º`" :percent="deviceLogsParams.isTilt/90" />
           <LiquidFill title="烟雾浓度" :value="deviceLogsParams.smokeWarning === '0' ? '正常':'告警'" :percent="deviceLogsParams.smokeWarning === '0' ? 0.05 : 0.75" color="rgba(255, 255, 255, 0.3)" />
