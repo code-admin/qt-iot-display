@@ -101,6 +101,33 @@ export const constantRoutes = [{
     meta: { title: 'Tree', icon: 'tree' }
   }]
 },
+{
+  path: '/cesium',
+  component: Layout,
+  redirect: '/cesium/index',
+  name: 'Cesium',
+  meta: { title: 'Cesium', icon: 'earth' },
+  children: [
+    {
+      path: 'index',
+      name: 'CesiumIndex',
+      component: () => import ('@/views/cesium/index'),
+      meta: { title: '视图', icon: 'camera' }
+    },
+    {
+      path: 'entity',
+      name: 'CesiumEntity',
+      component: () => import('@/views/cesium/entity'),
+      meta: { title: '实体', icon: 'entity' }
+    },
+    {
+      path: 'tileset',
+      name: 'CesiumTileset',
+      component: () => import('@/views/cesium/tileset'),
+      meta: { title: 'Tileset图元', icon: '' }
+    }
+  ]
+},
 
 // 404 page must be placed at the end !!!
 { path: '*', redirect: '/404', hidden: true }

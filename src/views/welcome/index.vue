@@ -30,7 +30,7 @@ export default {
       right: 3,
       sections: [
         { text: '智慧管网', url: '/dashboard', img: zhgw },
-        { text: '智慧安监', url: '', img: zhaj },
+        { text: '智慧安监', url: '/cesium', img: zhaj },
         { text: '智慧能源', url: '', img: zhny },
         { text: '智能水务', url: '', img: znswpng },
         { text: '智慧消防', url: '', img: zhxf }
