@@ -42,7 +42,7 @@ export default {
       model1: {},
       label1: {},
       position1: { lng: 114.0, lat: 40.0, height: 1.0 },
-      uri1: 'https://zouyaoji.top/vue-cesium/statics/SampleData/models/GroundVehicle/GroundVehicle.glb'
+      uri1: './statics/SampleData/models/CesiumAir/深圳图书馆.gltf'
     };
   },
   mounted() {
