@@ -1,8 +1,8 @@
 <template>
   <div class="login-container">
     <div class="title-container">
-      <h3 class="title">欢迎使用</h3>
-      <h3 class="title">智能设备综合管理平台</h3>
+      <h3 class="title">契通物联</h3>
+      <h3 class="title">智慧管道综合管理平台</h3>
     </div>
 
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" inline class="login-form" auto-complete="on" label-position="left">
